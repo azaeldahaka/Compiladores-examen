@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Sparkles, BookOpen } from 'lucide-react';
+import { ArrowLeft, Sparkles, BookOpen, MessageSquare } from 'lucide-react';
 import type { Question, FSRSRating } from '../types/question';
 import { FSRS } from '../utils/fsrs';
 import { Storage } from '../utils/storage';
+import { FeedbackModal } from './FeedbackModal';
 
 interface StudyRunnerProps {
   questions: Question[];
@@ -13,6 +14,7 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<'A' | 'B' | 'C' | 'D' | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
   const currentQ = questions[currentIndex];
 
@@ -23,20 +25,17 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
   };
 
   const handleRateFSRS = (rating: FSRSRating) => {
-    // Retrieve or initialize card
     const cards = Storage.getFSRSCards();
     const currentCard = cards[currentQ.id] || FSRS.createInitialCard(currentQ.id);
     const updatedCard = FSRS.scheduleNext(currentCard, rating);
     Storage.saveFSRSCard(updatedCard);
     Storage.recordStudyReview();
 
-    // Next question
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
       setSelectedOption(null);
       setShowExplanation(false);
     } else {
-      // Completed current pool
       onExit();
     }
   };
@@ -81,7 +80,7 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
       <div className="p-5 rounded-3xl bg-[#14141A] border border-indigo-500/20 space-y-3 shadow-xl">
         <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider text-indigo-400">
           <span>{currentQ.lessonTitle}</span>
-          <span className="text-white/40 font-mono text-[10px]">{currentQ.topic}</span>
+          <span className="text-white/40 font-mono text-[10px]">{currentQ.id}</span>
         </div>
         <h2 className="text-base font-semibold text-white leading-snug">
           {currentQ.questionText}
@@ -132,13 +131,24 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
         <div className="space-y-4 animate-in fade-in duration-300">
           {/* Theory card */}
           <div className="p-4 rounded-3xl bg-[#121620] border border-blue-500/30 space-y-3">
-            <div className="flex items-center space-x-2 text-xs font-semibold text-blue-400">
-              <BookOpen className="w-4 h-4" />
-              <span>Píldora Teórica de Cátedra</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2 text-xs font-semibold text-blue-400">
+                <BookOpen className="w-4 h-4" />
+                <span>Píldora Teórica de Cátedra</span>
+              </div>
+              <button
+                onClick={() => setIsFeedbackOpen(true)}
+                className="py-1 px-2.5 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white border border-white/10 text-[10px] font-semibold transition-all flex items-center space-x-1 cursor-pointer"
+              >
+                <MessageSquare className="w-3 h-3 text-indigo-400" />
+                <span>Sugerir cambio</span>
+              </button>
             </div>
+
             <p className="text-xs text-white/80 leading-relaxed">
               {currentQ.theorySummary}
             </p>
+
             <div className="pt-2 border-t border-white/10 text-[10px] text-white/40 space-y-1">
               <div><strong>Cátedra:</strong> {currentQ.sourceCatedra}</div>
               <div><strong>Libro:</strong> {currentQ.sourceBook}</div>
@@ -186,6 +196,14 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
           </div>
         </div>
       )}
+
+      {/* Feedback Modal */}
+      <FeedbackModal
+        isOpen={isFeedbackOpen}
+        question={currentQ}
+        userAnswer={selectedOption}
+        onClose={() => setIsFeedbackOpen(false)}
+      />
     </div>
   );
 };
