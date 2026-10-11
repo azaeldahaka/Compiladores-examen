@@ -4,6 +4,8 @@ import { ActiveSessionCard } from './components/ActiveSessionCard';
 import { ModeSelection } from './components/ModeSelection';
 import { MetricsOverview } from './components/MetricsOverview';
 import { HelpModal } from './components/HelpModal';
+import { ScopeSelectorModal } from './components/ScopeSelectorModal';
+import type { ExamScope } from './components/ScopeSelectorModal';
 import { BottomNav } from './components/BottomNav';
 import type { NavTab } from './components/BottomNav';
 import { ExamRunner } from './components/ExamRunner';
@@ -11,6 +13,7 @@ import { StudyRunner } from './components/StudyRunner';
 import type { ExamSession, LessonId, Question } from './types/question';
 import { QUESTIONS_BANK } from './data/questions';
 import { Storage } from './utils/storage';
+import { Clock, ArrowRight } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeSession, setActiveSession] = useState<ExamSession | null>(null);
@@ -19,6 +22,8 @@ export const App: React.FC = () => {
   const [studyPool, setStudyPool] = useState<Question[]>([]);
   const [activeTab, setActiveTab] = useState<NavTab>('simulator');
   const [selectedLessonFilter, setSelectedLessonFilter] = useState<LessonId | undefined>(undefined);
+  const [currentScope, setCurrentScope] = useState<ExamScope>('parcial-2');
+  const [isScopeModalOpen, setIsScopeModalOpen] = useState(false);
   const [helpState, setHelpState] = useState<{ isOpen: boolean; mode: 'exam' | 'study' | null }>({
     isOpen: false,
     mode: null,
@@ -66,7 +71,6 @@ export const App: React.FC = () => {
     if (lessonFilter) {
       pool = QUESTIONS_BANK.filter((q) => q.lessonId === lessonFilter);
     }
-    // Shuffle
     const shuffled = [...pool].sort(() => 0.5 - Math.random());
     setStudyPool(shuffled);
     setView('study');
@@ -112,7 +116,10 @@ export const App: React.FC = () => {
         <div className="absolute bottom-24 -left-20 w-[260px] h-[260px] rounded-full bg-gradient-to-tr from-[#5E5CE6]/10 to-transparent blur-[85px]"></div>
       </div>
 
-      <Header />
+      <Header
+        currentScope={currentScope}
+        onOpenScopeSelector={() => setIsScopeModalOpen(true)}
+      />
 
       <main className="flex-1 z-10 w-full">
         {view === 'exam' && activeSession ? (
@@ -137,16 +144,48 @@ export const App: React.FC = () => {
           <div className="max-w-md mx-auto p-4 space-y-6 pb-28 animate-in fade-in">
             {/* Title & Banner */}
             <div className="pt-2">
-              <div className="text-2xl font-extrabold tracking-tight text-white mb-1">
-                Compiladores
+              <div className="flex items-center justify-between">
+                <div className="text-2xl font-extrabold tracking-tight text-white mb-1">
+                  Compiladores
+                </div>
+                <button
+                  onClick={() => setIsScopeModalOpen(true)}
+                  className="text-xs px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 font-semibold border border-blue-500/30 hover:bg-blue-500/30 transition-all cursor-pointer"
+                >
+                  {currentScope === 'parcial-2' ? '2do Parcial' : currentScope === 'recuperatorio-1' ? 'Recuperatorio' : 'Final'}
+                </button>
               </div>
               <p className="text-sm text-white/50 leading-snug">
-                2do Parcial Cátedra • Lecciones 5 a 11 • Simulador & FSRS
+                {currentScope === 'parcial-2'
+                  ? '2do Parcial Cátedra • Lecciones 5 a 11 • Simulador & FSRS'
+                  : currentScope === 'recuperatorio-1'
+                  ? 'Recuperatorio 1er Parcial • Lecciones 1 a 4 (En preparación)'
+                  : 'Examen Final Integrador • Lecciones 1 a 11 (Próximamente)'}
               </p>
             </div>
 
+            {/* Upcoming Scope Notice (If user selected recuperatorio or final) */}
+            {currentScope !== 'parcial-2' && (
+              <div className="p-4 rounded-3xl bg-amber-500/10 border border-amber-500/30 space-y-2 animate-in fade-in">
+                <div className="flex items-center space-x-2 text-amber-300 font-semibold text-xs">
+                  <Clock className="w-4 h-4" />
+                  <span>Módulo en Calibración</span>
+                </div>
+                <p className="text-xs text-amber-200/80 leading-relaxed">
+                  Las preguntas del {currentScope === 'recuperatorio-1' ? '1er Parcial' : 'Final'} se están cargando con sus fuentes oficiales. Mientras tanto, podés seguir entrenando el 2do Parcial.
+                </p>
+                <button
+                  onClick={() => setCurrentScope('parcial-2')}
+                  className="text-xs font-semibold text-amber-300 flex items-center space-x-1 pt-1 hover:underline cursor-pointer"
+                >
+                  <span>Volver a entrenar 2do Parcial (66 preguntas)</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+
             {/* Paused Session Card (Shows only if active) */}
-            {activeSession && !activeSession.isCompleted && (
+            {activeSession && !activeSession.isCompleted && currentScope === 'parcial-2' && (
               <ActiveSessionCard
                 session={activeSession}
                 onResume={handleResumeSession}
@@ -168,6 +207,16 @@ export const App: React.FC = () => {
           </div>
         )}
       </main>
+
+      {/* Scope Selector Modal */}
+      <ScopeSelectorModal
+        isOpen={isScopeModalOpen}
+        currentScope={currentScope}
+        onSelectScope={(scope) => {
+          setCurrentScope(scope);
+        }}
+        onClose={() => setIsScopeModalOpen(false)}
+      />
 
       {/* Help Modal with Frosted Glass Backdrop */}
       <HelpModal
