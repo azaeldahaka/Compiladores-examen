@@ -8,12 +8,15 @@ import { ScopeSelectorModal } from './components/ScopeSelectorModal';
 import type { ExamScope } from './components/ScopeSelectorModal';
 import { BottomNav } from './components/BottomNav';
 import type { NavTab } from './components/BottomNav';
+import { LessonsTab } from './components/LessonsTab';
+import { MetricsTab } from './components/MetricsTab';
+import { SettingsTab } from './components/SettingsTab';
 import { ExamRunner } from './components/ExamRunner';
 import { StudyRunner } from './components/StudyRunner';
 import type { ExamSession, LessonId, Question } from './types/question';
 import { QUESTIONS_BANK } from './data/questions';
 import { Storage } from './utils/storage';
-import { Clock, ArrowRight } from 'lucide-react';
+import { Clock, ArrowRight, Lightbulb, Keyboard } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeSession, setActiveSession] = useState<ExamSession | null>(null);
@@ -39,10 +42,6 @@ export const App: React.FC = () => {
 
   const handleStartExam = () => {
     // Generate a balanced 20-question exam summing to 100 points
-    // 5 questions of 2 pts (= 10 pts)
-    // 10 questions of 5 pts (= 50 pts)
-    // 5 questions of 8 pts (= 40 pts)
-    // Total: 20 questions, 100 pts
     const q2 = QUESTIONS_BANK.filter((q) => q.points === 2).sort(() => 0.5 - Math.random()).slice(0, 5);
     const q5 = QUESTIONS_BANK.filter((q) => q.points === 5).sort(() => 0.5 - Math.random()).slice(0, 10);
     const q8 = QUESTIONS_BANK.filter((q) => q.points === 8).sort(() => 0.5 - Math.random()).slice(0, 5);
@@ -107,66 +106,97 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleResetAllData = () => {
+    localStorage.clear();
+    setActiveSession(null);
+    setStats(Storage.getStats());
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-blue-500/30 selection:text-white relative overflow-x-hidden">
       {/* Apple Dynamic Depth Background Glows */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[340px] h-[340px] rounded-full bg-gradient-to-b from-[#0A84FF]/15 to-transparent blur-[110px]"></div>
-        <div className="absolute top-[420px] -right-24 w-[280px] h-[280px] rounded-full bg-gradient-to-bl from-[#30D158]/10 to-transparent blur-[90px]"></div>
-        <div className="absolute bottom-24 -left-20 w-[260px] h-[260px] rounded-full bg-gradient-to-tr from-[#5E5CE6]/10 to-transparent blur-[85px]"></div>
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[340px] md:w-[600px] h-[340px] md:h-[600px] rounded-full bg-gradient-to-b from-[#0A84FF]/12 to-transparent blur-[110px]"></div>
+        <div className="absolute top-[420px] -right-24 w-[280px] md:w-[500px] h-[280px] md:h-[500px] rounded-full bg-gradient-to-bl from-[#30D158]/10 to-transparent blur-[90px]"></div>
+        <div className="absolute bottom-24 -left-20 w-[260px] md:w-[450px] h-[260px] md:h-[450px] rounded-full bg-gradient-to-tr from-[#5E5CE6]/10 to-transparent blur-[85px]"></div>
       </div>
 
       <Header
         currentScope={currentScope}
+        activeTab={activeTab}
+        onTabChange={(tab) => {
+          setActiveTab(tab);
+          if (view !== 'dashboard') setView('dashboard');
+        }}
         onOpenScopeSelector={() => setIsScopeModalOpen(true)}
       />
 
-      <main className="flex-1 z-10 w-full">
+      <main className="flex-1 z-10 w-full py-4 md:py-8 px-4 md:px-8">
         {view === 'exam' && activeSession ? (
-          <ExamRunner
-            session={activeSession}
-            onUpdateSession={handleUpdateSession}
-            onExit={() => {
-              setView('dashboard');
-              setStats(Storage.getStats());
-            }}
-          />
+          <div className="max-w-2xl mx-auto">
+            <ExamRunner
+              session={activeSession}
+              onUpdateSession={handleUpdateSession}
+              onExit={() => {
+                setView('dashboard');
+                setStats(Storage.getStats());
+              }}
+            />
+          </div>
         ) : view === 'study' ? (
-          <StudyRunner
-            questions={studyPool}
-            onExit={() => {
-              setView('dashboard');
-              setStats(Storage.getStats());
-            }}
-          />
+          <div className="max-w-2xl mx-auto">
+            <StudyRunner
+              questions={studyPool}
+              onExit={() => {
+                setView('dashboard');
+                setStats(Storage.getStats());
+              }}
+            />
+          </div>
+        ) : activeTab === 'lessons' ? (
+          <div className="max-w-4xl mx-auto pb-24 md:pb-12">
+            <LessonsTab onStartStudyLesson={handleStartStudy} />
+          </div>
+        ) : activeTab === 'metrics' ? (
+          <div className="max-w-2xl mx-auto pb-24 md:pb-12">
+            <MetricsTab stats={stats} />
+          </div>
+        ) : activeTab === 'settings' ? (
+          <div className="max-w-xl mx-auto pb-24 md:pb-12">
+            <SettingsTab onResetAllData={handleResetAllData} />
+          </div>
         ) : (
-          /* Dashboard Home View */
-          <div className="max-w-md mx-auto p-4 space-y-6 pb-28 animate-in fade-in">
-            {/* Title & Banner */}
-            <div className="pt-2">
-              <div className="flex items-center justify-between">
-                <div className="text-2xl font-extrabold tracking-tight text-white mb-1">
+          /* Simulator Dashboard (Desktop-Responsive 2-column Layout) */
+          <div className="max-w-5xl mx-auto pb-28 md:pb-12 animate-in fade-in">
+            {/* Title & Scope bar */}
+            <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white mb-1">
                   Compiladores
-                </div>
+                </h1>
+                <p className="text-sm text-white/50 leading-snug">
+                  {currentScope === 'parcial-2'
+                    ? '2do Parcial Cátedra • Lecciones 5 a 11 • Simulador & FSRS'
+                    : currentScope === 'recuperatorio-1'
+                    ? 'Recuperatorio 1er Parcial • Lecciones 1 a 4 (En preparación)'
+                    : 'Examen Final Integrador • Lecciones 1 a 11 (Próximamente)'}
+                </p>
+              </div>
+
+              <div className="hidden md:flex items-center space-x-2">
+                <span className="text-xs text-white/40">Instancia seleccionada:</span>
                 <button
                   onClick={() => setIsScopeModalOpen(true)}
-                  className="text-xs px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 font-semibold border border-blue-500/30 hover:bg-blue-500/30 transition-all cursor-pointer"
+                  className="text-xs px-3 py-1.5 rounded-full bg-blue-500/20 text-blue-300 font-semibold border border-blue-500/30 hover:bg-blue-500/30 transition-all cursor-pointer"
                 >
-                  {currentScope === 'parcial-2' ? '2do Parcial' : currentScope === 'recuperatorio-1' ? 'Recuperatorio' : 'Final'}
+                  {currentScope === 'parcial-2' ? '2do Parcial (66 reactivos)' : currentScope === 'recuperatorio-1' ? 'Recuperatorio' : 'Final'}
                 </button>
               </div>
-              <p className="text-sm text-white/50 leading-snug">
-                {currentScope === 'parcial-2'
-                  ? '2do Parcial Cátedra • Lecciones 5 a 11 • Simulador & FSRS'
-                  : currentScope === 'recuperatorio-1'
-                  ? 'Recuperatorio 1er Parcial • Lecciones 1 a 4 (En preparación)'
-                  : 'Examen Final Integrador • Lecciones 1 a 11 (Próximamente)'}
-              </p>
             </div>
 
             {/* Upcoming Scope Notice (If user selected recuperatorio or final) */}
             {currentScope !== 'parcial-2' && (
-              <div className="p-4 rounded-3xl bg-amber-500/10 border border-amber-500/30 space-y-2 animate-in fade-in">
+              <div className="mb-6 p-4 rounded-3xl bg-amber-500/10 border border-amber-500/30 space-y-2 animate-in fade-in">
                 <div className="flex items-center space-x-2 text-amber-300 font-semibold text-xs">
                   <Clock className="w-4 h-4" />
                   <span>Módulo en Calibración</span>
@@ -184,26 +214,50 @@ export const App: React.FC = () => {
               </div>
             )}
 
-            {/* Paused Session Card (Shows only if active) */}
-            {activeSession && !activeSession.isCompleted && currentScope === 'parcial-2' && (
-              <ActiveSessionCard
-                session={activeSession}
-                onResume={handleResumeSession}
-                onReset={handleResetSession}
-              />
-            )}
+            {/* Responsive Grid: 2 Columns on Desktop */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+              {/* Left Column (Actions & Active Session) */}
+              <div className="md:col-span-7 space-y-5">
+                {/* Paused Session Card (Shows only if active) */}
+                {activeSession && !activeSession.isCompleted && currentScope === 'parcial-2' && (
+                  <ActiveSessionCard
+                    session={activeSession}
+                    onResume={handleResumeSession}
+                    onReset={handleResetSession}
+                  />
+                )}
 
-            {/* Mode Selection Cards */}
-            <ModeSelection
-              onStartExam={handleStartExam}
-              onStartStudy={handleStartStudy}
-              onOpenHelp={(mode) => setHelpState({ isOpen: true, mode })}
-              selectedLessonFilter={selectedLessonFilter}
-              onSelectLessonFilter={setSelectedLessonFilter}
-            />
+                {/* Mode Selection Cards */}
+                <ModeSelection
+                  onStartExam={handleStartExam}
+                  onStartStudy={handleStartStudy}
+                  onOpenHelp={(mode) => setHelpState({ isOpen: true, mode })}
+                  selectedLessonFilter={selectedLessonFilter}
+                  onSelectLessonFilter={setSelectedLessonFilter}
+                />
+              </div>
 
-            {/* Preparation Metrics */}
-            <MetricsOverview stats={stats} />
+              {/* Right Column (Metrics & Quick Advice) */}
+              <div className="md:col-span-5 space-y-5">
+                {/* Preparation Metrics */}
+                <MetricsOverview stats={stats} />
+
+                {/* Desktop Study Tip Card */}
+                <div className="hidden md:block p-5 rounded-3xl bg-[#12141A] border border-white/10 space-y-3">
+                  <div className="flex items-center space-x-2 text-xs font-semibold text-blue-400">
+                    <Lightbulb className="w-4 h-4" />
+                    <span>Recomendación Pedagógica</span>
+                  </div>
+                  <p className="text-xs text-white/70 leading-relaxed">
+                    Hacé 1 simulacro completo por día para medir el reloj (45 min) y usá el <strong>Modo Estudio FSRS</strong> para repasar los temas donde hayas fallado preguntas de 8 puntos.
+                  </p>
+                  <div className="pt-2 border-t border-white/5 flex items-center space-x-2 text-[11px] text-white/40">
+                    <Keyboard className="w-3.5 h-3.5" />
+                    <span>Compatible con teclado y atajos en PC</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </main>
@@ -229,7 +283,7 @@ export const App: React.FC = () => {
         }}
       />
 
-      {/* Mobile Bottom Navigation */}
+      {/* Mobile Bottom Navigation (Hidden on desktop) */}
       {view === 'dashboard' && (
         <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
       )}

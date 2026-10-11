@@ -1,0 +1,19 @@
+{
+  "short_name": "Compiladores",
+  "name": "Compiladores UCASAL — Simulador de Examen",
+  "description": "Entrenador oficial e interactivo para el 2do Parcial de Compiladores (Lecciones 5 a 11) con FSRS y simulacro ponderado.",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "display": "standalone",
+  "orientation": "portrait",
+  "categories": ["education", "productivity"]
+}
