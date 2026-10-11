@@ -10,8 +10,11 @@ export const MathText: React.FC<MathTextProps> = ({ text, className = '' }) => {
   const renderedContent = useMemo(() => {
     if (!text) return null;
 
+    // Preserve escaped dollar symbols (\$ or literal $) so they don't corrupt inline math parsing
+    const safeText = text.replace(/\\\$/g, '___LITERAL_DOLLAR___');
+
     // Split text by display math ($$...$$) and inline math ($...$)
-    const parts = text.split(/(\$\$[\s\S]*?\$\$|\$[^\$\n]+?\$)/g);
+    const parts = safeText.split(/(\$\$[\s\S]*?\$\$|\$[^\$\n]+?\$)/g);
 
     return parts.map((part, index) => {
       if (!part) return null;
@@ -75,13 +78,23 @@ export const MathText: React.FC<MathTextProps> = ({ text, className = '' }) => {
 };
 
 const RenderFormattedText: React.FC<{ content: string }> = ({ content }) => {
-  // Split on bold (**...**), italic (*...*), inline code (`...`), or newline (\n)
-  const tokens = content.split(/(\*\*[\s\S]*?\*\*|\*[^\*\n]+?\*|`[^`\n]+?`|\n)/g);
+  // Split on bold (**...**), italic (*...*), inline code (`...`), newline (\n), or literal dollar token
+  const tokens = content.split(/(\*\*[\s\S]*?\*\*|\*[^\*\n]+?\*|`[^`\n]+?`|\n|___LITERAL_DOLLAR___)/g);
 
   return (
     <>
       {tokens.map((token, i) => {
         if (!token) return null;
+        if (token === '___LITERAL_DOLLAR___') {
+          return (
+            <code
+              key={i}
+              className="font-mono bg-white/10 px-1 py-0.5 rounded text-[11px] text-indigo-300 font-bold"
+            >
+              $
+            </code>
+          );
+        }
         if (token === '\n') {
           return <br key={i} />;
         }
@@ -109,7 +122,9 @@ const RenderFormattedText: React.FC<{ content: string }> = ({ content }) => {
             </code>
           );
         }
-        return <span key={i}>{token}</span>;
+        // Clean any stray unmatched **
+        const clean = token.replace(/\*\*/g, '');
+        return <span key={i}>{clean}</span>;
       })}
     </>
   );

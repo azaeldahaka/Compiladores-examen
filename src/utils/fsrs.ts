@@ -63,12 +63,27 @@ export const FSRS = {
       nextState = 2; // Review
     }
 
-    // Interval calculation (targeting 90% retention)
-    const factorRetention = Math.log(0.9);
-    const intervalDays = Math.max(1, Math.round(nextStability * (1 / factorRetention) * Math.log(0.9)));
-    const scheduledDays = rating === 1 ? 0 : intervalDays;
+    // Anki-style interval steps for exam preparation (< 1m, 10m, 1d, 3d)
+    let nextDueDate: Date;
+    let scheduledDays: number;
 
-    const nextDueDate = new Date(now.getTime() + scheduledDays * 24 * 3600 * 1000);
+    if (rating === 1) {
+      // Again: 1 minute
+      scheduledDays = 0;
+      nextDueDate = new Date(now.getTime() + 1 * 60 * 1000);
+    } else if (rating === 2) {
+      // Hard: 10 minutes
+      scheduledDays = 0;
+      nextDueDate = new Date(now.getTime() + 10 * 60 * 1000);
+    } else if (rating === 3) {
+      // Good: 1 day (or scaled based on stability)
+      scheduledDays = Math.max(1, Math.round(current.reps <= 1 ? 1 : nextStability * 0.7));
+      nextDueDate = new Date(now.getTime() + scheduledDays * 24 * 3600 * 1000);
+    } else {
+      // Easy: 3 days (or scaled based on stability)
+      scheduledDays = Math.max(3, Math.round(current.reps <= 1 ? 3 : nextStability * 1.2));
+      nextDueDate = new Date(now.getTime() + scheduledDays * 24 * 3600 * 1000);
+    }
 
     return {
       cardId: current.cardId,

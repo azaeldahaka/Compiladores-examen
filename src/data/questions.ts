@@ -1417,13 +1417,13 @@ export const QUESTIONS_BANK: Question[] = [
     "options": [
       {
         "id": "A",
-        "text": "Verdadera, porque $\\epsilon$ acompaña al centinela $\\$$ en el fondo de la pila.",
+        "text": "Verdadera, porque $\\epsilon$ acompaña al centinela '$' en el fondo de la pila.",
         "explanation": "Opción incorrecta según la definición formal.",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Falsa, porque $\\epsilon$ NUNCA se añade a ningún conjunto SIGUIENTE; este conjunto solo puede contener terminales reales de $V_T$ y el marcador de fin de entrada $\\$$.",
+        "text": "Falsa, porque $\\epsilon$ NUNCA se añade a ningún conjunto SIGUIENTE; este conjunto solo puede contener terminales reales de $V_T$ y el marcador de fin de entrada '$'.",
         "explanation": "En las notas de cátedra (`PredictivoLL-PrimeroSiguiente.md`) y en los libros de Aho y Louden, se enfatiza textualmente: *\"Nótese que $\\epsilon$ nunca se añade a SIGUIENTE\"*. Cuando un no terminal $A$ está al final de una regla $B \\to \\alpha A$, lo que se transfiere a $\\text{SIGUIENTE}(A)$ son los elementos de $\\text{SIGUIENTE}(B)$, no $\\epsilon$.",
         "isCorrect": true
       },
@@ -1467,7 +1467,7 @@ export const QUESTIONS_BANK: Question[] = [
       },
       {
         "id": "C",
-        "text": "En las celdas de todos los símbolos terminales $b$ pertenecientes a $\\text{SIGUIENTE}(A)$ (incluyendo el marcador $\\$$ si forma parte de él).",
+        "text": "En las celdas de todos los símbolos terminales $b$ pertenecientes a $\\text{SIGUIENTE}(A)$ (incluyendo el marcador '$' si forma parte de él).",
         "explanation": "Opción correcta según la cátedra.",
         "isCorrect": true
       },
@@ -1478,7 +1478,7 @@ export const QUESTIONS_BANK: Question[] = [
         "isCorrect": false
       }
     ],
-    "theorySummary": "Opción correcta según la cátedra.",
+    "theorySummary": "Cuando una regla deriva en $\\epsilon$ ($A \\to \\alpha$ con $\\epsilon \\in \\text{PRIMERO}(\\alpha)$), dicha producción debe agregarse en la tabla predictiva $M[A, b]$ para todos los terminales $b \\in \\text{SIGUIENTE}(A)$, incluido el centinela de fin de cadena '$'.",
     "sourceCatedra": "Diapositiva 12: Análisis Sintáctico LL(1) (Cardoso/Tolaba)",
     "sourceBook": "Aho et al. (Dragon Book 2da Ed) Cap. 4.4.3-4.4.4; Louden Cap. 4.5",
     "trapAnalysis": "Cuidado con los distractores que afirman propiedades fuera de la clase de gramática o límites de memoria."
@@ -2449,7 +2449,7 @@ export const QUESTIONS_BANK: Question[] = [
       },
       {
         "id": "B",
-        "text": "En la fila de $A$, para cada columna de los terminales pertenecientes a $\\text{SIGUIENTE}(A)$ (incluyendo $\\$$).",
+        "text": "En la fila de $A$, para cada columna de los terminales pertenecientes a $\\text{SIGUIENTE}(A)$ (incluyendo el centinela '$').",
         "explanation": "Como $\\alpha$ puede anularse, el parser debe saber qué hacer cuando ve los símbolos que pueden seguir legítimamente a $A$ en la entrada ($\\text{SIGUIENTE}(A)$).",
         "isCorrect": true
       },

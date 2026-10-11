@@ -172,11 +172,11 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                   {q.options.map((opt) => (
                     <div
                       key={opt.id}
-                      className={`text-[11px] p-2 rounded-xl flex items-start space-x-2 ${
+                      className={`text-[11px] p-2.5 rounded-xl flex items-start space-x-2.5 ${
                         opt.isCorrect
-                          ? 'bg-emerald-500/15 text-emerald-200 border border-emerald-500/30 font-medium'
+                          ? 'bg-emerald-500/20 text-emerald-100 border border-emerald-500/40 font-medium'
                           : chosen === opt.id
-                          ? 'bg-rose-500/15 text-rose-200 border border-rose-500/30'
+                          ? 'bg-rose-500/20 text-rose-100 border border-rose-500/40 font-medium'
                           : 'text-white/40'
                       }`}
                     >
@@ -184,6 +184,16 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                       <span className="flex-1">
                         <MathText text={opt.text} />
                       </span>
+                      {opt.isCorrect && (
+                        <span className="shrink-0 text-[10px] font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                          Correcta ✓
+                        </span>
+                      )}
+                      {chosen === opt.id && !opt.isCorrect && (
+                        <span className="shrink-0 text-[10px] font-bold text-rose-300 bg-rose-500/20 px-2 py-0.5 rounded-full border border-rose-500/30">
+                          Tu elección ✗
+                        </span>
+                      )}
                     </div>
                   ))}
                 </div>

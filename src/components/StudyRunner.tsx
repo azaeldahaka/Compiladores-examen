@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Sparkles, BookOpen, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Sparkles, BookOpen, MessageSquare, Check, X } from 'lucide-react';
 import type { Question, FSRSRating } from '../types/question';
 import { FSRS } from '../utils/fsrs';
 import { Storage } from '../utils/storage';
@@ -96,16 +96,29 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
 
           let btnStyle = 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10';
           let badgeStyle = 'bg-white/10 text-white/60';
+          let tag = null;
 
           if (showExplanation) {
             if (isCorrect) {
-              btnStyle = 'bg-emerald-950/40 border-emerald-500 text-emerald-100 font-medium shadow-lg shadow-emerald-950/40';
-              badgeStyle = 'bg-emerald-500 text-white';
+              btnStyle = 'bg-emerald-950/60 border-emerald-500 ring-2 ring-emerald-500/40 text-emerald-100 font-medium shadow-lg shadow-emerald-950/50';
+              badgeStyle = 'bg-emerald-600 text-white font-bold';
+              tag = (
+                <span className="shrink-0 text-[10px] font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-500/30 flex items-center space-x-1">
+                  <span>Correcta</span>
+                  <span>✓</span>
+                </span>
+              );
             } else if (isChosen) {
-              btnStyle = 'bg-rose-950/40 border-rose-500 text-rose-100';
-              badgeStyle = 'bg-rose-500 text-white';
+              btnStyle = 'bg-rose-950/60 border-rose-500 ring-2 ring-rose-500/40 text-rose-100 font-medium shadow-lg shadow-rose-950/50';
+              badgeStyle = 'bg-rose-600 text-white font-bold';
+              tag = (
+                <span className="shrink-0 text-[10px] font-bold text-rose-300 bg-rose-500/20 px-2 py-0.5 rounded-full border border-rose-500/30 flex items-center space-x-1">
+                  <span>Tu respuesta</span>
+                  <span>✗</span>
+                </span>
+              );
             } else {
-              btnStyle = 'bg-white/5 border-white/5 text-white/30 opacity-60';
+              btnStyle = 'bg-white/5 border-white/5 text-white/30 opacity-40';
             }
           }
 
@@ -121,9 +134,10 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
               >
                 {opt.id}
               </span>
-              <span className="text-xs leading-relaxed pt-1">
+              <span className="text-xs leading-relaxed pt-1 flex-1">
                 <MathText text={opt.text} />
               </span>
+              {tag}
             </button>
           );
         })}
@@ -132,6 +146,46 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
       {/* Immediate Active Feedback */}
       {showExplanation && (
         <div className="space-y-4 animate-in fade-in duration-300">
+          {/* Visual Verdict Banner */}
+          {(() => {
+            const correctOpt = currentQ.options.find((o) => o.isCorrect);
+            const userWasCorrect = selectedOption === correctOpt?.id;
+
+            return (
+              <div
+                className={`p-4 rounded-2xl border flex items-center space-x-3.5 shadow-xl ${
+                  userWasCorrect
+                    ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-200'
+                    : 'bg-rose-950/40 border-rose-500/50 text-rose-200'
+                }`}
+              >
+                <div
+                  className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-white font-bold ${
+                    userWasCorrect
+                      ? 'bg-emerald-600 shadow-lg shadow-emerald-600/30'
+                      : 'bg-rose-600 shadow-lg shadow-rose-600/30'
+                  }`}
+                >
+                  {userWasCorrect ? <Check className="w-5 h-5" /> : <X className="w-5 h-5" />}
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm font-bold text-white tracking-tight">
+                    {userWasCorrect ? '¡Respuesta Correcta!' : 'Respuesta Incorrecta'}
+                  </div>
+                  <div className="text-xs opacity-90 mt-0.5">
+                    {userWasCorrect ? (
+                      <span>Seleccionaste la opción correcta (+{currentQ.points} pts de cátedra).</span>
+                    ) : (
+                      <span>
+                        Elegiste la opción <strong>{selectedOption}</strong>. La opción correcta de cátedra es la <strong>{correctOpt?.id}</strong>.
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
           {/* Theory card */}
           <div className="p-4 rounded-3xl bg-[#121620] border border-blue-500/30 space-y-3">
             <div className="flex items-center justify-between">
@@ -158,10 +212,10 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
             </div>
           </div>
 
-          {/* FSRS Rating Selection */}
+          {/* FSRS Rating Selection (Anki-style steps: < 1m, 10m, 1d, 3d) */}
           <div className="space-y-2 pt-2">
             <div className="text-[11px] font-semibold text-white/60 text-center uppercase tracking-wider">
-              ¿Cómo sentiste este concepto? (FSRS)
+              ¿Cómo sentiste este concepto? (Repetición Espaciada)
             </div>
             <div className="grid grid-cols-4 gap-2">
               <button
@@ -169,7 +223,7 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
                 className="py-3 px-2 rounded-2xl bg-rose-950/60 hover:bg-rose-900 border border-rose-500/30 text-rose-300 font-semibold text-xs text-center transition-all cursor-pointer active:scale-95"
               >
                 <div>Otra vez</div>
-                <div className="text-[9px] text-rose-400/60 font-mono mt-0.5">&lt; 10m</div>
+                <div className="text-[9px] text-rose-400/60 font-mono mt-0.5">&lt; 1m</div>
               </button>
 
               <button
@@ -177,7 +231,7 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
                 className="py-3 px-2 rounded-2xl bg-amber-950/60 hover:bg-amber-900 border border-amber-500/30 text-amber-300 font-semibold text-xs text-center transition-all cursor-pointer active:scale-95"
               >
                 <div>Difícil</div>
-                <div className="text-[9px] text-amber-400/60 font-mono mt-0.5">1 día</div>
+                <div className="text-[9px] text-amber-400/60 font-mono mt-0.5">10m</div>
               </button>
 
               <button
@@ -185,7 +239,7 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
                 className="py-3 px-2 rounded-2xl bg-blue-950/60 hover:bg-blue-900 border border-blue-500/30 text-blue-300 font-semibold text-xs text-center transition-all cursor-pointer active:scale-95"
               >
                 <div>Bien</div>
-                <div className="text-[9px] text-blue-400/60 font-mono mt-0.5">3 días</div>
+                <div className="text-[9px] text-blue-400/60 font-mono mt-0.5">1d</div>
               </button>
 
               <button
@@ -193,7 +247,7 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
                 className="py-3 px-2 rounded-2xl bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-500/30 text-emerald-300 font-semibold text-xs text-center transition-all cursor-pointer active:scale-95"
               >
                 <div>Fácil</div>
-                <div className="text-[9px] text-emerald-400/60 font-mono mt-0.5">7 días</div>
+                <div className="text-[9px] text-emerald-400/60 font-mono mt-0.5">3d</div>
               </button>
             </div>
           </div>
