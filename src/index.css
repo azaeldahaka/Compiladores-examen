@@ -25,3 +25,18 @@ body {
   background: #334155;
   border-radius: 9999px;
 }
+
+/* KaTeX Typography and Theme adjustments */
+.katex {
+  color: inherit;
+  font-size: 1.05em;
+}
+.katex-display {
+  margin: 0.35em 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2em 0;
+}
+.katex-html {
+  white-space: normal;
+}

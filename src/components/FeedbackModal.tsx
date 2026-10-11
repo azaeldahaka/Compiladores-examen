@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, GitPullRequest, MessageSquare, Copy, Check, ExternalLink, Sparkles, Send } from 'lucide-react';
 import type { Question } from '../types/question';
+import { MathText } from './MathText';
 
 interface FeedbackModalProps {
   isOpen: boolean;
@@ -107,9 +108,9 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
             <div className="text-[11px] text-white/50 font-medium">
               {question.lessonTitle} • <span className="text-white/70">{question.topic}</span>
             </div>
-            <p className="text-white/90 line-clamp-2 italic font-serif">
-              "{question.questionText}"
-            </p>
+            <div className="text-white/90 line-clamp-2 italic font-serif">
+              "<MathText text={question.questionText} />"
+            </div>
             {userAnswer && (
               <div className="text-[10px] text-blue-300/80 font-mono">
                 Opción marcada en tu sesión: <strong>{userAnswer}</strong>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Sparkles, ChevronRight, ShieldAlert } from 'lucide-react';
 import type { LessonId } from '../types/question';
 import { LESSONS_CONFIG } from '../data/questions';
+import { MathText } from './MathText';
 
 interface LessonsTabProps {
   onStartStudyLesson: (lessonId: LessonId) => void;
@@ -82,16 +83,16 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({ onStartStudyLesson }) =>
                 </div>
               </div>
 
-              <p className="text-xs text-white/70 leading-relaxed">
-                {details?.summary}
-              </p>
+              <div className="text-xs text-white/70 leading-relaxed">
+                <MathText text={details?.summary || ''} />
+              </div>
 
               {/* Golden Rule / Exam Tip */}
               <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-[11px] leading-relaxed text-amber-200/90 flex items-start space-x-2">
                 <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                 <div>
                   <strong className="text-amber-300 block mb-0.5">Regla de Oro de Cátedra:</strong>
-                  {details?.goldenRule}
+                  <MathText text={details?.goldenRule || ''} />
                 </div>
               </div>
 

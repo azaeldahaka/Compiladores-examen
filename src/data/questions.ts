@@ -1223,7 +1223,7 @@ export const QUESTIONS_BANK: Question[] = [
     "lessonTitle": "Lección 10 — Análisis Sintáctico y Limpieza",
     "topic": "Pregunta Real de Parcial",
     "points": 8,
-    "questionText": "¿Qué técnica formal se utiliza para eliminar la recursividad indirecta por la izquierda en la siguiente gramática?**\n$$A \\to B d$$\n$$B \\to A e \\mid d$$",
+    "questionText": "¿Qué técnica formal se utiliza para eliminar la recursividad indirecta por la izquierda en la siguiente gramática?\n$$A \\to B d$$\n$$B \\to A e \\mid d$$",
     "options": [
       {
         "id": "A",

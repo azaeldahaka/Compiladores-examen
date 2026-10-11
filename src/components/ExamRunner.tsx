@@ -5,6 +5,7 @@ import type { Question, ExamSession } from '../types/question';
 import { QUESTIONS_BANK } from '../data/questions';
 import { Storage } from '../utils/storage';
 import { FeedbackModal } from './FeedbackModal';
+import { MathText } from './MathText';
 
 interface ExamRunnerProps {
   session: ExamSession;
@@ -163,7 +164,9 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                     {isCorrect ? `+${q.points} pts` : '0 pts'}
                   </span>
                 </div>
-                <p className="text-xs text-white font-medium mb-3">{q.questionText}</p>
+                <div className="text-xs text-white font-medium mb-3">
+                  <MathText text={q.questionText} />
+                </div>
 
                 <div className="space-y-1.5 mb-3">
                   {q.options.map((opt) => (
@@ -177,8 +180,10 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                           : 'text-white/40'
                       }`}
                     >
-                      <span className="font-mono font-bold">{opt.id})</span>
-                      <span>{opt.text}</span>
+                      <span className="font-mono font-bold shrink-0">{opt.id})</span>
+                      <span className="flex-1">
+                        <MathText text={opt.text} />
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -187,7 +192,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 text-[11px] text-white/70 leading-relaxed space-y-2">
                   <div>
                     <strong className="text-blue-300 block mb-1">Fundamento de Cátedra:</strong>
-                    {correctOpt?.explanation}
+                    <MathText text={correctOpt?.explanation || ''} />
                   </div>
 
                   <div className="flex items-center justify-between pt-2 border-t border-white/5">
@@ -277,7 +282,7 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           {currentQ.lessonTitle}
         </div>
         <h2 className="text-base font-semibold text-white leading-snug">
-          {currentQ.questionText}
+          <MathText text={currentQ.questionText} />
         </h2>
       </div>
 
@@ -302,7 +307,9 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
               >
                 {opt.id}
               </span>
-              <span className="text-xs leading-relaxed pt-1">{opt.text}</span>
+              <span className="text-xs leading-relaxed pt-1 flex-1">
+                <MathText text={opt.text} />
+              </span>
             </button>
           );
         })}

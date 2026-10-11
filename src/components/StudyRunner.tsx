@@ -4,6 +4,7 @@ import type { Question, FSRSRating } from '../types/question';
 import { FSRS } from '../utils/fsrs';
 import { Storage } from '../utils/storage';
 import { FeedbackModal } from './FeedbackModal';
+import { MathText } from './MathText';
 
 interface StudyRunnerProps {
   questions: Question[];
@@ -83,7 +84,7 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
           <span className="text-white/40 font-mono text-[10px]">{currentQ.id}</span>
         </div>
         <h2 className="text-base font-semibold text-white leading-snug">
-          {currentQ.questionText}
+          <MathText text={currentQ.questionText} />
         </h2>
       </div>
 
@@ -120,7 +121,9 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
               >
                 {opt.id}
               </span>
-              <span className="text-xs leading-relaxed pt-1">{opt.text}</span>
+              <span className="text-xs leading-relaxed pt-1">
+                <MathText text={opt.text} />
+              </span>
             </button>
           );
         })}
@@ -145,9 +148,9 @@ export const StudyRunner: React.FC<StudyRunnerProps> = ({ questions, onExit }) =
               </button>
             </div>
 
-            <p className="text-xs text-white/80 leading-relaxed">
-              {currentQ.theorySummary}
-            </p>
+            <div className="text-xs text-white/80 leading-relaxed">
+              <MathText text={currentQ.theorySummary} />
+            </div>
 
             <div className="pt-2 border-t border-white/10 text-[10px] text-white/40 space-y-1">
               <div><strong>Cátedra:</strong> {currentQ.sourceCatedra}</div>
