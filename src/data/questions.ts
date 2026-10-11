@@ -1,6 +1,4 @@
-// Banco de Preguntas Oficial - Compiladores UCASAL (Lecciones 5 a 11)
-// Generado a partir de la teoría enriquecida y exámenes reales de la cátedra.
-import { Question } from '../types/question';
+import type { Question } from '../types/question';
 
 export const QUESTIONS_BANK: Question[] = [
   {
