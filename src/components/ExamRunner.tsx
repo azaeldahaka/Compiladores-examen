@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, ArrowLeft, ArrowRight, Home } from 'lucide-react';
+import { Clock, ArrowLeft, ArrowRight, Home, MessageSquare } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import type { Question, ExamSession } from '../types/question';
 import { QUESTIONS_BANK } from '../data/questions';
 import { Storage } from '../utils/storage';
+import { FeedbackModal } from './FeedbackModal';
 
 interface ExamRunnerProps {
   session: ExamSession;
@@ -20,6 +21,10 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
   const [userAnswers, setUserAnswers] = useState<Record<string, 'A' | 'B' | 'C' | 'D'>>(session.userAnswers);
   const [timeLeft, setTimeLeft] = useState(session.timeRemainingSeconds);
   const [isFinished, setIsFinished] = useState(session.isCompleted);
+  const [feedbackQuestion, setFeedbackQuestion] = useState<{
+    question: Question;
+    userAnswer?: 'A' | 'B' | 'C' | 'D';
+  } | null>(null);
 
   // Map session question IDs to full Question objects
   const sessionQuestions = session.questionIds
@@ -179,9 +184,22 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 </div>
 
                 {/* Theory Explanation */}
-                <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 text-[11px] text-white/70 leading-relaxed">
-                  <strong className="text-blue-300 block mb-1">Fundamento de Cátedra:</strong>
-                  {correctOpt?.explanation}
+                <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 text-[11px] text-white/70 leading-relaxed space-y-2">
+                  <div>
+                    <strong className="text-blue-300 block mb-1">Fundamento de Cátedra:</strong>
+                    {correctOpt?.explanation}
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                    <span className="text-[10px] text-white/40 font-mono">ID: {q.id}</span>
+                    <button
+                      onClick={() => setFeedbackQuestion({ question: q, userAnswer: chosen })}
+                      className="py-1 px-2.5 rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white border border-white/10 text-[10px] font-semibold transition-all flex items-center space-x-1 cursor-pointer"
+                    >
+                      <MessageSquare className="w-3 h-3 text-indigo-400" />
+                      <span>Sugerir corrección</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -196,6 +214,14 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           <Home className="w-4 h-4" />
           <span>Volver al Menú Principal</span>
         </button>
+
+        {/* Feedback Modal */}
+        <FeedbackModal
+          isOpen={feedbackQuestion !== null}
+          question={feedbackQuestion?.question}
+          userAnswer={feedbackQuestion?.userAnswer}
+          onClose={() => setFeedbackQuestion(null)}
+        />
       </div>
     );
   }
@@ -223,9 +249,18 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
         <span className="text-xs font-mono text-white/50">
           Pregunta <strong className="text-white text-sm">{currentIndex + 1}</strong> de {sessionQuestions.length}
         </span>
-        <span className="text-xs px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 font-mono font-semibold">
-          {currentQ.points} PUNTOS
-        </span>
+        <div className="flex items-center space-x-2">
+          <span className="text-xs px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 font-mono font-semibold">
+            {currentQ.points} PUNTOS
+          </span>
+          <button
+            onClick={() => setFeedbackQuestion({ question: currentQ, userAnswer: userAnswers[currentQ.id] })}
+            title="Sugerir corrección o reportar error"
+            className="p-1 rounded-full bg-white/5 hover:bg-white/10 text-white/40 hover:text-white border border-white/10 transition-all cursor-pointer"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* Progress Bar */}
@@ -300,6 +335,14 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
           </button>
         )}
       </div>
+
+      {/* Feedback Modal */}
+      <FeedbackModal
+        isOpen={feedbackQuestion !== null}
+        question={feedbackQuestion?.question}
+        userAnswer={feedbackQuestion?.userAnswer}
+        onClose={() => setFeedbackQuestion(null)}
+      />
     </div>
   );
 };
