@@ -83,7 +83,7 @@ export const QUESTIONS_BANK: Question[] = [
     "lessonTitle": "Lección 05 — Gramáticas Regulares",
     "topic": "Razonamiento de Estados y Límites",
     "points": 8,
-    "questionText": "Al Ingeniero Facundo le encargaron diseñar un analizador que valide cadenas con una cantidad balanceada de paréntesis del tipo $\\text{\"((...))\"}$ ($L = \\{ a^n b^n \\mid n \\ge 1 \\}$). Luego de analizar el problema, determinó que es imposible describirlo mediante una gramática regular porque:",
+    "questionText": "Al Ingeniero Facundo le encargaron diseñar un analizador que valide cadenas con una cantidad balanceada de paréntesis del tipo `\"((...))\"` ($L = \\{ a^n b^n \\mid n \\ge 1 \\}$). Luego de analizar el problema, determinó que es imposible describirlo mediante una gramática regular porque:",
     "options": [
       {
         "id": "A",
@@ -1950,7 +1950,7 @@ export const QUESTIONS_BANK: Question[] = [
       {
         "id": "A",
         "text": "`bacba`",
-        "explanation": "Para $w = \\epsilon$, la cadena es `c`. Para $w = \\text{\"bb\"}$, $w^R = \\text{\"bb\"}$, la cadena es `bbcbb`.",
+        "explanation": "Para $w = \\epsilon$, la cadena es `c`. Para $w = \\text{'bb'}$, $w^R = \\text{'bb'}$, la cadena es `bbcbb`.",
         "isCorrect": true
       },
       {
@@ -1968,11 +1968,11 @@ export const QUESTIONS_BANK: Question[] = [
       {
         "id": "D",
         "text": "`c`",
-        "explanation": "Para $w = \\epsilon$, la cadena es `c`. Para $w = \\text{\"bb\"}$, $w^R = \\text{\"bb\"}$, la cadena es `bbcbb`.",
+        "explanation": "Para $w = \\epsilon$, la cadena es `c`. Para $w = \\text{'bb'}$, $w^R = \\text{'bb'}$, la cadena es `bbcbb`.",
         "isCorrect": true
       }
     ],
-    "theorySummary": "Para $w = \\epsilon$, la cadena es `c`. Para $w = \\text{\"bb\"}$, $w^R = \\text{\"bb\"}$, la cadena es `bbcbb`.",
+    "theorySummary": "Para $w = \\epsilon$, la cadena es `c`. Para $w = \\text{'bb'}$, $w^R = \\text{'bb'}$, la cadena es `bbcbb`.",
     "sourceCatedra": "Diapositiva 7: Autómatas a Pila / PLY Lex (Cardoso/Tolaba) (Simulacro P14)",
     "sourceBook": "Peter Linz Cap. 7; Dragon Book Cap. 3.5",
     "trapAnalysis": "Pregunta de integración de simulacro general."
@@ -2508,6 +2508,310 @@ export const QUESTIONS_BANK: Question[] = [
     "sourceCatedra": "Diapositiva 12: Análisis Sintáctico LL(1) (Cardoso/Tolaba) (Simulacro P39)",
     "sourceBook": "Aho et al. (Dragon Book 2da Ed) Cap. 4.4.3-4.4.4; Louden Cap. 4.5",
     "trapAnalysis": "Pregunta de integración de simulacro general."
+  },
+  {
+    "id": "L10-PRAC01",
+    "lessonId": "L10",
+    "lessonTitle": "Lección 10 — Análisis Sintáctico y Limpieza",
+    "topic": "Práctica de Examen: Eliminación de Recursividad Izquierda Directa",
+    "points": 8,
+    "questionText": "Dada la siguiente gramática con recursividad por la izquierda en múltiples alternativas:\n$$E \\to E + T \\mid E - T \\mid T$$\n¿Cuál es el conjunto exacto de producciones que resulta al aplicar el algoritmo estándar de eliminación de recursividad izquierda de cátedra?",
+    "options": [
+      {
+        "id": "A",
+        "text": "$E \\to T E', \\quad E' \\to + T E' \\mid - T E' \\mid \\epsilon$",
+        "explanation": "Identificamos las alternativas recursivas $E \\to E \\alpha$ con $\\alpha_1 = + T$ y $\\alpha_2 = - T$, y la alternativa base $\\beta = T$. Según la fórmula canónica de cátedra, se reescribe como $E \\to \\beta E'$ y $E' \\to \\alpha_1 E' \\mid \\alpha_2 E' \\mid \\epsilon$.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "$E \\to + T E' \\mid - T E' \\mid T, \\quad E' \\to E \\mid \\epsilon$",
+        "explanation": "Error: no se debe iniciar la derivación de $E$ con los operadores '+' ni '-', y $E'$ no debe volver a invocar a $E$.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "$E \\to E' T, \\quad E' \\to + T E' \\mid \\epsilon$",
+        "explanation": "Error: ubicar $E'$ a la izquierda de $T$ ($E' T$) genera recursividad izquierda rota y omite el operador '-'.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "$E \\to T + E' \\mid T - E', \\quad E' \\to \\epsilon$",
+        "explanation": "Error: esta forma solo permitiría derivar expresiones de longitud fija con un único operador y anula la recursividad.",
+        "isCorrect": false
+      }
+    ],
+    "theorySummary": "Para $A \\to A \\alpha_1 \\mid A \\alpha_2 \\mid \\beta$, la regla de transformación de cátedra es: $A \\to \\beta A'$ y $A' \\to \\alpha_1 A' \\mid \\alpha_2 A' \\mid \\epsilon$.",
+    "sourceCatedra": "Diapositiva 11: Análisis Sintáctico - Eliminación de Recursión Izquierda (Cardoso/Tolaba)",
+    "sourceBook": "Aho et al. (Dragon Book 2da Ed) Cap. 4.3.3; Louden Cap. 4.3",
+    "trapAnalysis": "Confundir el rol de las partes recursivas $\\alpha$ con las partes base no recursivas $\\beta$."
+  },
+  {
+    "id": "L10-PRAC02",
+    "lessonId": "L10",
+    "lessonTitle": "Lección 10 — Análisis Sintáctico y Limpieza",
+    "topic": "Práctica de Examen: Factorización por la Izquierda (Dangling-Else)",
+    "points": 8,
+    "questionText": "Dada la especificación de sentencias condicionales con prefijo común:\n$$S \\to \\text{if } C \\text{ then } S \\text{ else } S \\mid \\text{if } C \\text{ then } S \\mid a$$\nAl aplicar el algoritmo de factorización por la izquierda (*Left Factoring*), la gramática resultante es:",
+    "options": [
+      {
+        "id": "A",
+        "text": "$S \\to \\text{if } C \\text{ then } S \\; S' \\mid a, \\quad S' \\to \\text{else } S \\mid \\epsilon$",
+        "explanation": "El prefijo común más largo entre las dos primeras alternativas es $\\alpha = \\text{if } C \\text{ then } S$. Las colas restantes son $\\beta_1 = \\text{else } S$ y $\\beta_2 = \\epsilon$. Por ende, $S \\to \\alpha S' \\mid a$ y $S' \\to \\text{else } S \\mid \\epsilon$.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "$S \\to \\text{if } C \\text{ then } S' \\mid a, \\quad S' \\to S \\text{ else } S \\mid S$",
+        "explanation": "Error: no se factorizó el prefijo completo 'if C then S', dejando 'S' fuera del factor común.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "$S \\to \\text{if } C \\text{ then } S \\; S', \\quad S' \\to \\text{else } S \\mid a$",
+        "explanation": "Error: la alternativa $a$ no comparte el prefijo condicional y debe permanecer como alternativa independiente en $S$.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "$S \\to S' \\text{ else } S \\mid a, \\quad S' \\to \\text{if } C \\text{ then } S$",
+        "explanation": "Error: la factorización por la izquierda debe aislar el prefijo en el inicio de la producción, no el sufijo.",
+        "isCorrect": false
+      }
+    ],
+    "theorySummary": "Para $A \\to \\alpha \\beta_1 \\mid \\alpha \\beta_2 \\mid \\gamma$, se aísla el prefijo común más largo $\\alpha$: $A \\to \\alpha A' \\mid \\gamma$ y $A' \\to \\beta_1 \\mid \\beta_2$ (donde si una rama coincide exactamente con $\\alpha$, su cola es $\\epsilon$).",
+    "sourceCatedra": "Diapositiva 11: Análisis Sintáctico - Factorización Izquierda (Cardoso/Tolaba)",
+    "sourceBook": "Aho et al. (Dragon Book 2da Ed) Cap. 4.3.4; Louden Cap. 4.3",
+    "trapAnalysis": "No considerar que la alternativa corta $\\text{if } C \\text{ then } S$ aporta la producción vacía $\\epsilon$ en el nuevo no terminal $S'$."
+  },
+  {
+    "id": "L10-PRAC03",
+    "lessonId": "L10",
+    "lessonTitle": "Lección 10 — Análisis Sintáctico y Limpieza",
+    "topic": "Práctica de Examen: Limpieza de Gramáticas en Dos Fases",
+    "points": 8,
+    "questionText": "Dada la siguiente gramática con axioma $S$:\n$$S \\to A B \\mid c$$\n$$A \\to a A$$\n$$B \\to b$$\n$$C \\to c S$$\nAl aplicar rigurosamente el algoritmo de limpieza de dos fases de la cátedra (Fase 1: eliminación de símbolos no generativos; Fase 2: eliminación de símbolos inalcanzables), ¿qué gramática reducida equivalente se obtiene?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Únicamente la producción: $S \\to c$.",
+        "explanation": "En la Fase 1, $A$ no tiene caso base terminal, por lo que $A$ no es generativo y se elimina. Al desaparecer $A$, la producción $S \\to A B$ se destruye, quedando solo $S \\to c$. En la Fase 2, partiendo de $S$, los símbolos $B$ y $C$ son inalcanzables. La gramática limpia final es exclusivamente $S \\to c$.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "$S \\to c$ junto con $B \\to b$.",
+        "explanation": "Error: aunque $B$ es generativo ($B \\to b$), en la Fase 2 resulta completamente inalcanzable desde el axioma $S$ y debe ser descartado.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "$S \\to A B \\mid c$ y $B \\to b$.",
+        "explanation": "Error: no se detectó que $A \\to a A$ entra en ciclo infinito sin derivar nunca a terminales (no generativo).",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "$S \\to c$ y $C \\to c S$.",
+        "explanation": "Error: $C$ puede alcanzar a $S$, pero la condición de alcanzabilidad exige que sea alcanzable DESDE el axioma $S$ ($S \\Rightarrow^* \\alpha C \\beta$).",
+        "isCorrect": false
+      }
+    ],
+    "theorySummary": "La limpieza exige dos fases estrictas: 1) Eliminar símbolos no generativos (que no derivan en terminales). 2) Eliminar símbolos inalcanzables desde el axioma $S$ ($S \\not\\Rightarrow^* \\alpha X \\beta$).",
+    "sourceCatedra": "Diapositiva 11: Limpieza de Gramáticas - Símbolos Inútiles (Cardoso/Tolaba)",
+    "sourceBook": "Louden Cap. 4.2; Hopcroft, Motwani & Ullman Cap. 7.1",
+    "trapAnalysis": "Confundir que un no terminal derive en el axioma con que sea alcanzable desde el axioma."
+  },
+  {
+    "id": "L10-PRAC04",
+    "lessonId": "L10",
+    "lessonTitle": "Lección 10 — Análisis Sintáctico y Limpieza",
+    "topic": "Práctica de Examen: Eliminación de Recursividad Izquierda Indirecta",
+    "points": 8,
+    "questionText": "Dada la siguiente gramática con ciclo de recursividad indirecta entre los no terminales ordenados $(S, A)$:\n$$S \\to A a \\mid b$$\n$$A \\to S c \\mid d$$\nAl aplicar el algoritmo sistemático de cátedra, ¿cuál es la gramática transformada sin recursividad izquierda?",
+    "options": [
+      {
+        "id": "A",
+        "text": "$S \\to A a \\mid b, \\quad A \\to b c A' \\mid d A', \\quad A' \\to a c A' \\mid \\epsilon$",
+        "explanation": "Paso 1: $S$ no tiene recursión directa. Paso 2: sustituimos $S$ en la regla de $A$: $A \\to (A a \\mid b) c \\mid d \\implies A \\to A a c \\mid b c \\mid d$. Ahora $A$ tiene recursión directa con $\\alpha = a c$ y bases $\\beta \\in \\{b c, d\\}$. Eliminando la recursión directa en $A$: $A \\to b c A' \\mid d A'$ y $A' \\to a c A' \\mid \\epsilon$.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "$S \\to b S', \\quad S' \\to a c S' \\mid \\epsilon, \\quad A \\to d$",
+        "explanation": "Error: no se respetó el orden sistemático de los no terminales y se alteraron arbitrariamente las reglas de $S$.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "$S \\to A a \\mid b, \\quad A \\to A a c \\mid b c \\mid d$",
+        "explanation": "Error: este es solo el paso intermedio de sustitución; falta eliminar la recursividad directa creada sobre $A$.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "$S \\to A a \\mid b, \\quad A \\to d A', \\quad A' \\to c A' \\mid \\epsilon$",
+        "explanation": "Error: se omitió el término sustituido $b c$ proveniente de la regla $S \\to b$.",
+        "isCorrect": false
+      }
+    ],
+    "theorySummary": "El algoritmo sistemático ordena los no terminales $(A_1, \\dots, A_n)$. Para cada par $j < i$, sustituye $A_j$ en las reglas de $A_i$. Una vez expuesta la recursividad directa sobre $A_i$, la elimina con un nuevo no terminal $A_i'$.",
+    "sourceCatedra": "Diapositiva 11: Análisis Sintáctico - Recursividad Indirecta (Cardoso/Tolaba)",
+    "sourceBook": "Aho et al. (Dragon Book 2da Ed) Cap. 4.3.3 Algoritmo 4.19",
+    "trapAnalysis": "Detenerse en la sustitución intermedia sin resolver la recursión directa resultante en el no terminal sustituido."
+  },
+  {
+    "id": "L11-PRAC01",
+    "lessonId": "L11",
+    "lessonTitle": "Lección 11 — Sintáctico Predictivo LL(1)",
+    "topic": "Práctica de Examen: Cálculo Formal de PRIMERO con No Terminales Anulables",
+    "points": 8,
+    "questionText": "Dada la siguiente gramática con producciones anulables:\n$$S \\to A B C$$\n$$A \\to a \\mid \\epsilon$$\n$$B \\to b \\mid \\epsilon$$\n$$C \\to c \\mid d$$\n¿Cuál es el conjunto $\\text{PRIMERO}(S)$ calculado formalmente?",
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\{a, b, c, d\\}$",
+        "explanation": "$\\text{PRIMERO}(A) = \\{a, \\epsilon\\}$. Como $A$ es anulable (contiene $\\epsilon$), se agrega $\\text{PRIMERO}(B) \\setminus \\{\\epsilon\\} = \\{b\\}$. Como $B$ también es anulable, se continúa evaluando y se agrega $\\text{PRIMERO}(C) = \\{c, d\\}$. Dado que $C$ no es anulable (no tiene $\\epsilon$), la propagación se detiene y $\\epsilon \\notin \\text{PRIMERO}(S)$. Resultado: $\\{a, b, c, d\\}$.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "$\\{a, \\epsilon\\}$",
+        "explanation": "Error común: detenerse en el primer no terminal $A$ sin propagar hacia $B$ y $C$ a pesar de que $A$ contiene $\\epsilon$.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "$\\{a, b, c, d, \\epsilon\\}$",
+        "explanation": "Error: $\\epsilon$ solo pertenecería a $\\text{PRIMERO}(S)$ si TODOS los símbolos del lado derecho ($A$, $B$ y $C$) fueran anulables simultáneamente, lo cual no ocurre porque $C$ no deriva en $\\epsilon$.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "$\\{c, d\\}$",
+        "explanation": "Error: ignorar los terminales iniciales 'a' y 'b' producidos por las alternativas no vacías de $A$ y $B$.",
+        "isCorrect": false
+      }
+    ],
+    "theorySummary": "$\\text{PRIMERO}(X_1 X_2 \\dots X_k)$ contiene $\\text{PRIMERO}(X_1) \\setminus \\{\\epsilon\\}$. Si $X_1$ es anulable, se añade $\\text{PRIMERO}(X_2) \\setminus \\{\\epsilon\\}$, y así sucesivamente. $\\epsilon$ solo se añade si TODOS los $X_i$ son anulables.",
+    "sourceCatedra": "Diapositiva 12: Conjuntos PRIMERO y SIGUIENTE (Cardoso/Tolaba)",
+    "sourceBook": "Aho et al. (Dragon Book 2da Ed) Cap. 4.4.2; Louden Cap. 4.5",
+    "trapAnalysis": "Agregar $\\epsilon$ a $\\text{PRIMERO}(S)$ creyendo que la anulación de algunos símbolos arrastra automáticamente la anulación total de la cadena."
+  },
+  {
+    "id": "L11-PRAC02",
+    "lessonId": "L11",
+    "lessonTitle": "Lección 11 — Sintáctico Predictivo LL(1)",
+    "topic": "Práctica de Examen: Cálculo Completo de Conjuntos SIGUIENTE",
+    "points": 8,
+    "questionText": "Dada la gramática estándar de expresiones aritméticas LL(1):\n$$E \\to T E'$$\n$$E' \\to + T E' \\mid \\epsilon$$\n$$T \\to F T'$$\n$$T' \\to * F T' \\mid \\epsilon$$\n$$F \\to ( E ) \\mid \\text{id}$$\n¿Cuáles son los conjuntos exactos $\\text{SIGUIENTE}(E)$ y $\\text{SIGUIENTE}(E')$?",
+    "options": [
+      {
+        "id": "A",
+        "text": "$\\text{SIGUIENTE}(E) = \\text{SIGUIENTE}(E') = \\{ ) , \\$ \\}$",
+        "explanation": "1) $E$ es el axioma de inicio $\\implies \\$ \\in \\text{SIGUIENTE}(E)$. 2) En la producción $F \\to ( E )$, el símbolo terminal ')' sigue a $E \\implies ) \\in \\text{SIGUIENTE}(E)$. Por tanto, $\\text{SIGUIENTE}(E) = \\{ ), \\$ \\}$. 3) En $E \\to T E'$, $E'$ aparece al final de la producción $\\implies$ todo $\\text{SIGUIENTE}(E)$ se transfiere a $\\text{SIGUIENTE}(E')$. Así, $\\text{SIGUIENTE}(E') = \\{ ), \\$ \\}$.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "$\\text{SIGUIENTE}(E) = \\{ + \\}, \\quad \\text{SIGUIENTE}(E') = \\{ \\epsilon, \\$ \\}$",
+        "explanation": "Error gravísimo de cátedra: $\\epsilon$ NUNCA pertenece a un conjunto SIGUIENTE. Además, '+' no sigue directamente a $E$.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "$\\text{SIGUIENTE}(E) = \\{ \\text{id}, ( \\}, \\quad \\text{SIGUIENTE}(E') = \\{ ) \\}$",
+        "explanation": "Error: se confunden los conjuntos PRIMERO con SIGUIENTE.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "$\\text{SIGUIENTE}(E') = \\{ +, *, \\$ \\}$",
+        "explanation": "Error: '*' pertenece a $\\text{SIGUIENTE}(T)$ y $\\text{SIGUIENTE}(T')$, no a $E'$.",
+        "isCorrect": false
+      }
+    ],
+    "theorySummary": "Reglas de SIGUIENTE: 1) $\\$ \\in \\text{SIGUIENTE}(S)$. 2) Si $A \\to \\alpha B \\beta$, $\\text{PRIMERO}(\\beta) \\setminus \\{\\epsilon\\} \\subseteq \\text{SIGUIENTE}(B)$. 3) Si $A \\to \\alpha B$ o $\\epsilon \\in \\text{PRIMERO}(\\beta)$, $\\text{SIGUIENTE}(A) \\subseteq \\text{SIGUIENTE}(B)$. $\\epsilon$ JAMÁS entra a SIGUIENTE.",
+    "sourceCatedra": "Diapositiva 12: Conjuntos PRIMERO y SIGUIENTE (Cardoso/Tolaba)",
+    "sourceBook": "Aho et al. (Dragon Book 2da Ed) Cap. 4.4.2; Louden Cap. 4.5",
+    "trapAnalysis": "Incluir $\\epsilon$ dentro de SIGUIENTE o no propagar el marcador de fin de entrada $\\$$ al no terminal derivado al final de la regla."
+  },
+  {
+    "id": "L11-PRAC03",
+    "lessonId": "L11",
+    "lessonTitle": "Lección 11 — Sintáctico Predictivo LL(1)",
+    "topic": "Práctica de Examen: Detección de Conflicto en Tabla M (No LL(1))",
+    "points": 8,
+    "questionText": "Dada la siguiente gramática:\n$$S \\to A B$$\n$$A \\to a \\mid \\epsilon$$\n$$B \\to a \\mid b$$\nAl intentar construir la tabla predictiva $M$, ¿por qué razón formal la gramática NO es LL(1)?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Porque la celda $M[A, a]$ sufre un conflicto de decisión múltiple al recibir simultáneamente las producciones $A \\to a$ y $A \\to \\epsilon$.",
+        "explanation": "1) La regla $A \\to a$ entra en $M[A, a]$ porque $a \\in \\text{PRIMERO}(a)$. 2) La regla $A \\to \\epsilon$ entra en $M[A, x]$ para todo $x \\in \\text{SIGUIENTE}(A)$. En la regla $S \\to A B$, lo que sigue a $A$ es $B \\implies \\text{PRIMERO}(B) = \\{a, b\\} \\subseteq \\text{SIGUIENTE}(A)$. Por tanto, $a \\in \\text{SIGUIENTE}(A)$, lo que hace que $A \\to \\epsilon$ TAMBIÉN se registre en $M[A, a]$. Al contener dos reglas en la misma celda, se produce una colisión que viola la condición LL(1).",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "Porque la celda $M[S, b]$ queda sin producciones registradas (error sintáctico).",
+        "explanation": "Error: las celdas vacías en la tabla predictiva simplemente denotan errores sintácticos legítimos, no constituyen un conflicto.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Porque la gramática presenta recursividad por la izquierda en el no terminal $S$.",
+        "explanation": "Error: la gramática no contiene ninguna recursividad izquierda ni directa ni indirecta.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Porque el símbolo 'a' aparece en dos no terminales distintos.",
+        "explanation": "Error: que dos no terminales distintos compartan símbolos terminales en sus lados derechos no impide que una gramática sea LL(1).",
+        "isCorrect": false
+      }
+    ],
+    "theorySummary": "Una gramática NO es LL(1) si cualquier celda $M[A, a]$ recibe $\\ge 2$ producciones. Esto ocurre cuando $\\text{PRIMERO}(A \\to \\alpha)$ y $\\text{SIGUIENTE}(A)$ se solapan (en este caso, ambos contienen 'a').",
+    "sourceCatedra": "Diapositiva 12: Construcción de la Tabla de Análisis Sintáctico LL(1) (Cardoso/Tolaba)",
+    "sourceBook": "Aho et al. (Dragon Book 2da Ed) Cap. 4.4.3; Louden Cap. 4.5",
+    "trapAnalysis": "Creer que el conflicto ocurre en el no terminal $S$ en lugar del no terminal anulable $A$ que solapa su terminal con su conjunto SIGUIENTE."
+  },
+  {
+    "id": "L11-PRAC04",
+    "lessonId": "L11",
+    "lessonTitle": "Lección 11 — Sintáctico Predictivo LL(1)",
+    "topic": "Práctica de Examen: Trazado de Pila en Parser Predictivo No Recursivo",
+    "points": 8,
+    "questionText": "Dada la gramática con tabla LL(1) válida:\n$$S \\to a A$$\n$$A \\to b \\mid c$$\nSe inicializa el parser predictivo no recursivo con entrada $w = a c \\$$ y la pila cargada con $\\$ S$ (donde $S$ es el tope de la pila).\nTras realizar la expansión de $S$ y emparejar (*match*) el primer terminal 'a' con la entrada, ¿cuál es el estado exacto de la pila antes de procesar el símbolo 'c'?",
+    "options": [
+      {
+        "id": "A",
+        "text": "Fondo: $\\$, \\quad$ Tope: $A \\quad$ (pila: $\\$ A$)",
+        "explanation": "Paso 1: Pila inicial $\\$ S$, entrada actual 'a'. Paso 2: Producción $M[S, a] = S \\to a A$. Se desapila $S$ y se apila en orden inverso el lado derecho: pila queda $\\$ A a$ (tope 'a'). Paso 3: El tope 'a' coincide con la entrada 'a' (*match*), por lo que se desapila 'a' y el apuntador de entrada avanza a 'c'. La pila resultante contiene $\\$ A$, con $A$ en la cima.",
+        "isCorrect": true
+      },
+      {
+        "id": "B",
+        "text": "La pila queda vacía únicamente con $\\$.",
+        "explanation": "Error: no se puede haber consumido $A$, ya que el símbolo 'c' todavía no fue derivado ni emparejado.",
+        "isCorrect": false
+      },
+      {
+        "id": "C",
+        "text": "Fondo: $\\$, \\quad$ Tope: $a \\quad$ (pila: $\\$ A a$)",
+        "explanation": "Error: este estado es previo al emparejamiento; tras el match, el terminal 'a' debe ser desapilado.",
+        "isCorrect": false
+      },
+      {
+        "id": "D",
+        "text": "Fondo: $\\$, \\quad$ Tope: $c \\quad$ (pila: $\\$ c$)",
+        "explanation": "Error: confunde la reducción ascendente con el análisis descendente predictivo donde la pila contiene el no terminal $A$ pendiente de derivación.",
+        "isCorrect": false
+      }
+    ],
+    "theorySummary": "En el parser con pila LL(1): 1) Al aplicar $X \\to Y_1 Y_2 \\dots Y_k$, se desapila $X$ y se apilan los símbolos en orden inverso ($Y_k \\dots Y_1$) para que $Y_1$ quede en el tope. 2) Al coincidir el terminal del tope con la entrada, se desapila (*match*) y se avanza la entrada.",
+    "sourceCatedra": "Diapositiva 12: Algoritmo de Análisis Sintáctico Predictivo con Pila (Cardoso/Tolaba)",
+    "sourceBook": "Aho et al. (Dragon Book 2da Ed) Cap. 4.4.4; Louden Cap. 4.5",
+    "trapAnalysis": "Olvidar que el terminal emparejado se desapila de inmediato dejando expuesto al siguiente símbolo de la producción ($A$)."
   }
 ];
 
@@ -2517,6 +2821,6 @@ export const LESSONS_CONFIG = [
   { id: 'L07', title: 'Lección 07 — PLY Lex y AP', badge: 'PLY / Pila', questionCount: 11 },
   { id: 'L08', title: 'Lección 08 — Gramáticas Libres de Contexto', badge: 'GLC / Árboles', questionCount: 8 },
   { id: 'L09', title: 'Lección 09 — Máquinas de Turing', badge: 'Turing', questionCount: 10 },
-  { id: 'L10', title: 'Lección 10 — Análisis Sintáctico y Limpieza', badge: 'Parser / Limpieza', questionCount: 9 },
-  { id: 'L11', title: 'Lección 11 — Sintáctico Predictivo LL(1)', badge: 'LL(1) / FIRST-FOLLOW', questionCount: 8 },
+  { id: 'L10', title: 'Lección 10 — Análisis Sintáctico y Limpieza', badge: 'Parser / Limpieza', questionCount: 13 },
+  { id: 'L11', title: 'Lección 11 — Sintáctico Predictivo LL(1)', badge: 'LL(1) / FIRST-FOLLOW', questionCount: 12 },
 ];

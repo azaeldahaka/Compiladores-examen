@@ -21,7 +21,7 @@ export const MathText: React.FC<MathTextProps> = ({ text, className = '' }) => {
 
       // 1. Display math: $$...$$
       if (part.startsWith('$$') && part.endsWith('$$') && part.length >= 4) {
-        const mathContent = part.slice(2, -2).trim();
+        const mathContent = part.slice(2, -2).trim().replace(/___LITERAL_DOLLAR___/g, '\\text{\\$}');
         try {
           const html = katex.renderToString(mathContent, {
             displayMode: true,
@@ -46,7 +46,7 @@ export const MathText: React.FC<MathTextProps> = ({ text, className = '' }) => {
 
       // 2. Inline math: $...$
       if (part.startsWith('$') && part.endsWith('$') && part.length >= 2) {
-        const mathContent = part.slice(1, -1).trim();
+        const mathContent = part.slice(1, -1).trim().replace(/___LITERAL_DOLLAR___/g, '\\text{\\$}');
         try {
           const html = katex.renderToString(mathContent, {
             displayMode: false,
