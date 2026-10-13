@@ -16,9 +16,11 @@ import { StudyRunner } from './components/StudyRunner';
 import type { ExamSession, LessonId, Question } from './types/question';
 import { QUESTIONS_BANK } from './data/questions';
 import { Storage } from './utils/storage';
+import { ThemeManager, type Theme } from './utils/theme';
 import { Clock, ArrowRight, Lightbulb, Keyboard } from 'lucide-react';
 
 export const App: React.FC = () => {
+  const [theme, setTheme] = useState<Theme>(ThemeManager.getTheme());
   const [activeSession, setActiveSession] = useState<ExamSession | null>(null);
   const [stats, setStats] = useState(Storage.getStats());
   const [view, setView] = useState<'dashboard' | 'exam' | 'study'>('dashboard');
@@ -32,6 +34,11 @@ export const App: React.FC = () => {
     mode: null,
   });
 
+  // Apply theme on mount and when changed
+  useEffect(() => {
+    ThemeManager.applyTheme(theme);
+  }, [theme]);
+
   // Load state on mount
   useEffect(() => {
     const session = Storage.getActiveSession();
@@ -39,6 +46,11 @@ export const App: React.FC = () => {
       setActiveSession(session);
     }
   }, []);
+
+  const handleToggleTheme = () => {
+    const next = ThemeManager.toggleTheme();
+    setTheme(next);
+  };
 
   const handleStartExam = () => {
     // Generate a balanced 20-question exam summing to 100 points
@@ -113,22 +125,30 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-blue-500/30 selection:text-white relative overflow-x-hidden">
-      {/* Apple Dynamic Depth Background Glows */}
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B0D13] text-slate-800 dark:text-white flex flex-col font-sans selection:bg-indigo-500/20 selection:text-indigo-900 dark:selection:bg-blue-500/30 dark:selection:text-white relative overflow-x-hidden transition-colors duration-300">
+      {/* Ambient Depth Background: Pastel blobs in Light Mode, Neon glows in Dark Mode */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[340px] md:w-[600px] h-[340px] md:h-[600px] rounded-full bg-gradient-to-b from-[#0A84FF]/12 to-transparent blur-[110px]"></div>
-        <div className="absolute top-[420px] -right-24 w-[280px] md:w-[500px] h-[280px] md:h-[500px] rounded-full bg-gradient-to-bl from-[#30D158]/10 to-transparent blur-[90px]"></div>
-        <div className="absolute bottom-24 -left-20 w-[260px] md:w-[450px] h-[260px] md:h-[450px] rounded-full bg-gradient-to-tr from-[#5E5CE6]/10 to-transparent blur-[85px]"></div>
+        {/* Dark mode neon glows */}
+        <div className="hidden dark:block absolute -top-32 left-1/2 -translate-x-1/2 w-[340px] md:w-[600px] h-[340px] md:h-[600px] rounded-full bg-gradient-to-b from-[#0A84FF]/12 to-transparent blur-[110px]"></div>
+        <div className="hidden dark:block absolute top-[420px] -right-24 w-[280px] md:w-[500px] h-[280px] md:h-[500px] rounded-full bg-gradient-to-bl from-[#30D158]/10 to-transparent blur-[90px]"></div>
+        <div className="hidden dark:block absolute bottom-24 -left-20 w-[260px] md:w-[450px] h-[260px] md:h-[450px] rounded-full bg-gradient-to-tr from-[#5E5CE6]/10 to-transparent blur-[85px]"></div>
+
+        {/* Light mode soothing pastel meshes */}
+        <div className="dark:hidden absolute -top-36 left-1/2 -translate-x-1/2 w-[380px] md:w-[650px] h-[380px] md:h-[650px] rounded-full bg-gradient-to-b from-indigo-200/40 via-purple-100/30 to-transparent blur-[120px] animate-float-slow"></div>
+        <div className="dark:hidden absolute top-[380px] -right-20 w-[300px] md:w-[520px] h-[300px] md:h-[520px] rounded-full bg-gradient-to-bl from-emerald-200/35 via-teal-100/25 to-transparent blur-[100px] animate-float-slow" style={{ animationDelay: '3s' }}></div>
+        <div className="dark:hidden absolute bottom-24 -left-20 w-[280px] md:w-[480px] h-[280px] md:h-[480px] rounded-full bg-gradient-to-tr from-rose-200/30 via-pink-100/20 to-transparent blur-[95px] animate-float-slow" style={{ animationDelay: '6s' }}></div>
       </div>
 
       <Header
         currentScope={currentScope}
         activeTab={activeTab}
+        theme={theme}
         onTabChange={(tab) => {
           setActiveTab(tab);
           if (view !== 'dashboard') setView('dashboard');
         }}
         onOpenScopeSelector={() => setIsScopeModalOpen(true)}
+        onToggleTheme={handleToggleTheme}
       />
 
       <main className="flex-1 z-10 w-full py-4 md:py-8 px-4 md:px-8">
@@ -163,7 +183,11 @@ export const App: React.FC = () => {
           </div>
         ) : activeTab === 'settings' ? (
           <div className="max-w-xl mx-auto pb-24 md:pb-12">
-            <SettingsTab onResetAllData={handleResetAllData} />
+            <SettingsTab
+              onResetAllData={handleResetAllData}
+              theme={theme}
+              onToggleTheme={handleToggleTheme}
+            />
           </div>
         ) : (
           /* Simulator Dashboard (Desktop-Responsive 2-column Layout) */
@@ -171,12 +195,12 @@ export const App: React.FC = () => {
             {/* Title & Scope bar */}
             <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
               <div>
-                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white mb-1">
+                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-1">
                   Compiladores
                 </h1>
-                <p className="text-sm text-white/50 leading-snug">
+                <p className="text-sm text-slate-500 dark:text-white/50 leading-snug">
                   {currentScope === 'parcial-2'
-                    ? '2do Parcial Cátedra • Lecciones 5 a 11 • Simulador & FSRS'
+                    ? `2do Parcial Cátedra • Lecciones 5 a 11 • ${QUESTIONS_BANK.length} Preguntas • Simulador & FSRS`
                     : currentScope === 'recuperatorio-1'
                     ? 'Recuperatorio 1er Parcial • Lecciones 1 a 4 (En preparación)'
                     : 'Examen Final Integrador • Lecciones 1 a 11 (Próximamente)'}
@@ -184,31 +208,31 @@ export const App: React.FC = () => {
               </div>
 
               <div className="hidden md:flex items-center space-x-2">
-                <span className="text-xs text-white/40">Instancia seleccionada:</span>
+                <span className="text-xs text-slate-500 dark:text-white/40">Instancia seleccionada:</span>
                 <button
                   onClick={() => setIsScopeModalOpen(true)}
-                  className="text-xs px-3 py-1.5 rounded-full bg-blue-500/20 text-blue-300 font-semibold border border-blue-500/30 hover:bg-blue-500/30 transition-all cursor-pointer"
+                  className="text-xs px-3 py-1.5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-blue-500/20 dark:text-blue-300 font-semibold border border-indigo-200 dark:border-blue-500/30 hover:bg-indigo-200/70 dark:hover:bg-blue-500/30 transition-all cursor-pointer shadow-xs"
                 >
-                  {currentScope === 'parcial-2' ? '2do Parcial (66 reactivos)' : currentScope === 'recuperatorio-1' ? 'Recuperatorio' : 'Final'}
+                  {currentScope === 'parcial-2' ? `2do Parcial (${QUESTIONS_BANK.length} reactivos)` : currentScope === 'recuperatorio-1' ? 'Recuperatorio' : 'Final'}
                 </button>
               </div>
             </div>
 
             {/* Upcoming Scope Notice (If user selected recuperatorio or final) */}
             {currentScope !== 'parcial-2' && (
-              <div className="mb-6 p-4 rounded-3xl bg-amber-500/10 border border-amber-500/30 space-y-2 animate-in fade-in">
-                <div className="flex items-center space-x-2 text-amber-300 font-semibold text-xs">
+              <div className="mb-6 p-4 rounded-3xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 space-y-2 animate-in fade-in shadow-xs">
+                <div className="flex items-center space-x-2 text-amber-800 dark:text-amber-300 font-semibold text-xs">
                   <Clock className="w-4 h-4" />
                   <span>Módulo en Calibración</span>
                 </div>
-                <p className="text-xs text-amber-200/80 leading-relaxed">
+                <p className="text-xs text-amber-900/80 dark:text-amber-200/80 leading-relaxed">
                   Las preguntas del {currentScope === 'recuperatorio-1' ? '1er Parcial' : 'Final'} se están cargando con sus fuentes oficiales. Mientras tanto, podés seguir entrenando el 2do Parcial.
                 </p>
                 <button
                   onClick={() => setCurrentScope('parcial-2')}
-                  className="text-xs font-semibold text-amber-300 flex items-center space-x-1 pt-1 hover:underline cursor-pointer"
+                  className="text-xs font-semibold text-amber-800 dark:text-amber-300 flex items-center space-x-1 pt-1 hover:underline cursor-pointer"
                 >
-                  <span>Volver a entrenar 2do Parcial (66 preguntas)</span>
+                  <span>Volver a entrenar 2do Parcial ({QUESTIONS_BANK.length} preguntas)</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -243,15 +267,15 @@ export const App: React.FC = () => {
                 <MetricsOverview stats={stats} />
 
                 {/* Desktop Study Tip Card */}
-                <div className="hidden md:block p-5 rounded-3xl bg-[#12141A] border border-white/10 space-y-3">
-                  <div className="flex items-center space-x-2 text-xs font-semibold text-blue-400">
+                <div className="hidden md:block p-5 rounded-3xl bg-white dark:bg-[#12141A] border border-indigo-100/80 dark:border-white/10 shadow-sm dark:shadow-none space-y-3 transition-colors duration-300">
+                  <div className="flex items-center space-x-2 text-xs font-semibold text-indigo-600 dark:text-blue-400">
                     <Lightbulb className="w-4 h-4" />
                     <span>Recomendación Pedagógica</span>
                   </div>
-                  <p className="text-xs text-white/70 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-white/70 leading-relaxed">
                     Hacé 1 simulacro completo por día para medir el reloj (45 min) y usá el <strong>Modo Estudio FSRS</strong> para repasar los temas donde hayas fallado preguntas de 8 puntos.
                   </p>
-                  <div className="pt-2 border-t border-white/5 flex items-center space-x-2 text-[11px] text-white/40">
+                  <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex items-center space-x-2 text-[11px] text-slate-400 dark:text-white/40">
                     <Keyboard className="w-3.5 h-3.5" />
                     <span>Compatible con teclado y atajos en PC</span>
                   </div>

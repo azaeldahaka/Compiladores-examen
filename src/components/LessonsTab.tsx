@@ -48,13 +48,13 @@ const LESSON_DETAILS: Record<string, { summary: string; goldenRule: string; topi
 
 export const LessonsTab: React.FC<LessonsTabProps> = ({ onStartStudyLesson }) => {
   return (
-    <div className="space-y-4 animate-in fade-in">
+    <div className="space-y-4 animate-fade-in-up">
       <div className="flex items-center justify-between px-1">
         <div>
-          <h2 className="text-xl font-extrabold text-white tracking-tight">Lecciones de Cátedra</h2>
-          <p className="text-xs text-white/50">Temario oficial del 2do Parcial (Lic. Cardoso / Ing. Tolaba)</p>
+          <h2 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Lecciones de Cátedra</h2>
+          <p className="text-xs text-slate-500 dark:text-white/50">Temario oficial del 2do Parcial (Lic. Cardoso / Ing. Tolaba)</p>
         </div>
-        <span className="text-xs font-mono text-blue-400 font-semibold px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/20">
+        <span className="text-xs font-mono text-indigo-600 dark:text-blue-400 font-semibold px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-blue-500/10 border border-indigo-200 dark:border-blue-500/20 shadow-xs">
           7 MÓDULOS
         </span>
       </div>
@@ -65,33 +65,33 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({ onStartStudyLesson }) =>
           return (
             <div
               key={lesson.id}
-              className="p-5 rounded-3xl bg-[#131317] border border-white/10 hover:border-white/20 transition-all space-y-3 shadow-xl"
+              className="p-5 rounded-3xl bg-white dark:bg-[#131317] border border-slate-200/80 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20 transition-all space-y-3 shadow-xs dark:shadow-xl"
             >
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center space-x-2 mb-1">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-blue-500/20 text-indigo-700 dark:text-blue-300 border border-indigo-200/60 dark:border-transparent">
                       {lesson.badge}
                     </span>
-                    <span className="text-[11px] text-white/40 font-mono">
+                    <span className="text-[11px] text-slate-500 dark:text-white/40 font-mono">
                       {lesson.questionCount} reactivos
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-white tracking-tight">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
                     {lesson.title}
                   </h3>
                 </div>
               </div>
 
-              <div className="text-xs text-white/70 leading-relaxed">
+              <div className="text-xs text-slate-600 dark:text-white/70 leading-relaxed">
                 <MathText text={details?.summary || ''} />
               </div>
 
               {/* Golden Rule / Exam Tip */}
-              <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-[11px] leading-relaxed text-amber-200/90 flex items-start space-x-2">
-                <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200/80 dark:border-amber-500/20 text-[11px] leading-relaxed text-amber-900 dark:text-amber-200/90 flex items-start space-x-2">
+                <ShieldAlert className="w-4 h-4 text-amber-500 dark:text-amber-400 shrink-0 mt-0.5" />
                 <div>
-                  <strong className="text-amber-300 block mb-0.5">Regla de Oro de Cátedra:</strong>
+                  <strong className="text-amber-800 dark:text-amber-300 block mb-0.5">Regla de Oro de Cátedra:</strong>
                   <MathText text={details?.goldenRule || ''} />
                 </div>
               </div>
@@ -101,7 +101,7 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({ onStartStudyLesson }) =>
                 {details?.topics.map((t, idx) => (
                   <span
                     key={idx}
-                    className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-white/60 border border-white/5"
+                    className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-white/60 border border-slate-200/60 dark:border-white/5"
                   >
                     {t}
                   </span>
@@ -111,13 +111,13 @@ export const LessonsTab: React.FC<LessonsTabProps> = ({ onStartStudyLesson }) =>
               {/* Study Action */}
               <button
                 onClick={() => onStartStudyLesson(lesson.id as LessonId)}
-                className="w-full mt-2 py-3 px-4 rounded-2xl bg-white/5 hover:bg-white/10 active:scale-98 border border-white/10 text-white font-semibold text-xs transition-all flex items-center justify-between cursor-pointer"
+                className="w-full mt-2 py-3 px-4 rounded-2xl bg-slate-50 hover:bg-slate-100 dark:bg-white/5 dark:hover:bg-white/10 active:scale-98 border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-white font-semibold text-xs transition-all flex items-center justify-between cursor-pointer"
               >
                 <span className="flex items-center space-x-2">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                   <span>Practicar Lección con FSRS</span>
                 </span>
-                <ChevronRight className="w-4 h-4 text-white/40" />
+                <ChevronRight className="w-4 h-4 text-slate-400 dark:text-white/40" />
               </button>
             </div>
           );
