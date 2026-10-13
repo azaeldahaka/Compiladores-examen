@@ -2,8 +2,10 @@ export type DifficultyPoints = 2 | 5 | 8;
 
 export type LessonId = 'L05' | 'L06' | 'L07' | 'L08' | 'L09' | 'L10' | 'L11';
 
+export type OptionId = 'A' | 'B' | 'C' | 'D' | 'E';
+
 export interface QuestionOption {
-  id: 'A' | 'B' | 'C' | 'D';
+  id: OptionId;
   text: string;
   explanation: string;
   isCorrect: boolean;
@@ -45,7 +47,7 @@ export interface ExamSession {
   lessonFilter?: LessonId;
   currentQuestionIndex: number;
   questionIds: string[];
-  userAnswers: Record<string, 'A' | 'B' | 'C' | 'D'>;
+  userAnswers: Record<string, OptionId>;
   score: number;
   timeRemainingSeconds: number; // For exam mode (e.g. 45 min)
   isCompleted: boolean;

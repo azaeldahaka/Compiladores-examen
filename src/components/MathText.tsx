@@ -20,7 +20,7 @@ export const MathText: React.FC<MathTextProps> = ({ text, className = '' }) => {
       .replace(/\*\*(\s*)\*\*/g, '$1');
 
     // Split text by display math ($$...$$) and inline math ($...$)
-    const parts = safeText.split(/(\$\$[\s\S]*?\$\$|\$[^\$\n]+?\$)/g);
+    const parts = safeText.split(/(\$\$[\s\S]*?\$\$|\$[^$\n]+?\$)/g);
 
     return parts.map((part, index) => {
       if (!part) return null;
@@ -43,7 +43,7 @@ export const MathText: React.FC<MathTextProps> = ({ text, className = '' }) => {
           );
         } catch {
           return (
-            <span key={index} className="block font-mono text-xs my-1 text-center text-white/80">
+            <span key={index} className="block font-mono text-xs my-1 text-center text-slate-600 dark:text-white/80">
               {mathContent}
             </span>
           );
@@ -68,7 +68,7 @@ export const MathText: React.FC<MathTextProps> = ({ text, className = '' }) => {
           );
         } catch {
           return (
-            <span key={index} className="font-mono text-xs text-indigo-300">
+            <span key={index} className="font-mono text-xs text-indigo-600 dark:text-indigo-300">
               {mathContent}
             </span>
           );
@@ -85,7 +85,7 @@ export const MathText: React.FC<MathTextProps> = ({ text, className = '' }) => {
 
 const RenderFormattedText: React.FC<{ content: string }> = ({ content }) => {
   // Split on bold (**...** on single line), italic (*...*), inline code (`...`), newline (\n), or literal dollar token
-  const tokens = content.split(/(\*\*[^\*\n]+?\*\*|\*[^\*\n]+?\*|`[^`\n]+?`|\n|___LITERAL_DOLLAR___)/g);
+  const tokens = content.split(/(\*\*[^*\n]+?\*\*|\*[^*\n]+?\*|`[^`\n]+?`|\n|___LITERAL_DOLLAR___)/g);
 
   return (
     <>
@@ -95,7 +95,7 @@ const RenderFormattedText: React.FC<{ content: string }> = ({ content }) => {
           return (
             <code
               key={i}
-              className="font-mono bg-white/10 px-1 py-0.5 rounded text-[11px] text-indigo-300 font-bold"
+              className="font-mono bg-indigo-50 dark:bg-white/10 px-1 py-0.5 rounded text-[11px] text-indigo-700 dark:text-indigo-300 font-bold"
             >
               $
             </code>
@@ -106,14 +106,14 @@ const RenderFormattedText: React.FC<{ content: string }> = ({ content }) => {
         }
         if (token.startsWith('**') && token.endsWith('**') && token.length >= 4) {
           return (
-            <strong key={i} className="font-bold text-white">
+            <strong key={i} className="font-bold text-slate-900 dark:text-white">
               {token.slice(2, -2)}
             </strong>
           );
         }
         if (token.startsWith('*') && token.endsWith('*') && token.length >= 2) {
           return (
-            <em key={i} className="italic text-white/90">
+            <em key={i} className="italic text-slate-700 dark:text-white/90">
               {token.slice(1, -1)}
             </em>
           );
@@ -122,7 +122,7 @@ const RenderFormattedText: React.FC<{ content: string }> = ({ content }) => {
           return (
             <code
               key={i}
-              className="font-mono bg-white/10 px-1.5 py-0.5 rounded text-[11px] text-indigo-300"
+              className="font-mono bg-indigo-50/80 dark:bg-white/10 px-1.5 py-0.5 rounded text-[11px] text-indigo-700 dark:text-indigo-300"
             >
               {token.slice(1, -1)}
             </code>
