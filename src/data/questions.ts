@@ -121,7 +121,7 @@ export const QUESTIONS_BANK: Question[] = [
     "lessonTitle": "Lección 05 — Gramáticas Regulares",
     "topic": "Caso de Transformación de Cátedra",
     "points": 8,
-    "questionText": "Dada la siguiente gramática:**\n$$S \\to a A$$\n$$A \\to S b \\mid c$$\n**¿Cuál de las siguientes afirmaciones es CORRECTA respecto a su estructura y lenguaje generado?",
+    "questionText": "Dada la siguiente gramática:\n$$S \\to a A$$\n$$A \\to S b \\mid c$$\n¿Cuál de las siguientes afirmaciones es CORRECTA respecto a su estructura y lenguaje generado?",
     "options": [
       {
         "id": "A",
@@ -501,37 +501,37 @@ export const QUESTIONS_BANK: Question[] = [
     "lessonTitle": "Lección 07 — PLY Lex y Autómatas con Pila",
     "topic": "Pregunta Real de Parcial",
     "points": 8,
-    "questionText": "Dado un Autómata con Pila $M$ diseñado para reconocer el lenguaje de balanceo simétrico centrado en la letra 'c', $L = \\{ w c w^R \\mid w \\in \\{a, b\\}^* \\}$:**  \n**¿Cuál de las siguientes cadenas pertenece al lenguaje aceptado por el autómata?",
+    "questionText": "Dado un Autómata con Pila $M$ diseñado para reconocer el lenguaje de balanceo simétrico centrado en la letra 'c', $L = \\{ w c w^R \\mid w \\in \\{a, b\\}^* \\}$, ¿cuál de las siguientes cadenas pertenece al lenguaje aceptado por el autómata?",
     "options": [
       {
         "id": "A",
         "text": "`bacba`",
-        "explanation": "Opción incorrecta según la definición formal.",
+        "explanation": "Incorrecto: para la subcadena inicial $w = \\text{'ba'}$, su reflejo debe ser $w^R = \\text{'ab'}$, por lo que la cadena válida sería `bacab`, no `bacba`.",
         "isCorrect": false
       },
       {
         "id": "B",
         "text": "`abc`",
-        "explanation": "Opción incorrecta según la definición formal.",
+        "explanation": "Incorrecto: la cadena carece de la parte derecha simétrica $w^R$ tras el marcador central 'c'.",
         "isCorrect": false
       },
       {
         "id": "C",
         "text": "`bbcbb`",
-        "explanation": "Opción correcta según la cátedra.",
+        "explanation": "Correcto: tomando $w = \\text{'bb'}$, su reflejo exacto es $w^R = \\text{'bb'}$. Al unirlas alrededor del centinela central 'c' se obtiene la cadena simétrica `bbcbb`.",
         "isCorrect": true
       },
       {
         "id": "D",
         "text": "$\\epsilon$",
-        "explanation": "Opción incorrecta según la definición formal.",
+        "explanation": "Incorrecto: el lenguaje exige la presencia mínima del delimitador central 'c' (obtenido cuando $w = \\epsilon$).",
         "isCorrect": false
       }
     ],
-    "theorySummary": "Opción correcta según la cátedra.",
+    "theorySummary": "Para un lenguaje $L = \\{ w c w^R \\mid w \\in \\{a, b\\}^* \\}$, el símbolo 'c' actúa como marcador central determinista que indica al autómata cuándo dejar de apilar símbolos de $w$ y comenzar a desapilar para verificar la simetría de $w^R$. Con $w = \\text{'bb'}$, la cadena aceptada es `bbcbb`.",
     "sourceCatedra": "Diapositiva 7: Autómatas a Pila / PLY Lex (Cardoso/Tolaba)",
     "sourceBook": "Peter Linz Cap. 7; Dragon Book Cap. 3.5",
-    "trapAnalysis": "Cuidado con los distractores que afirman propiedades fuera de la clase de gramática o límites de memoria."
+    "trapAnalysis": "Confundir el reflejo de la cadena $w^R$ con la misma cadena repetida, o no verificar que la inversión invierta el orden de los caracteres."
   },
   {
     "id": "L07-Q03",
@@ -767,7 +767,7 @@ export const QUESTIONS_BANK: Question[] = [
     "lessonTitle": "Lección 08 — Gramáticas Libres de Contexto",
     "topic": "Pregunta Real de Parcial",
     "points": 8,
-    "questionText": "Sea $\\Sigma = \\{a, b\\}$, la gramática:**\n$$S \\to a P b$$\n$$P \\to \\epsilon \\mid a P b$$\n**genera el lenguaje:",
+    "questionText": "Sea $\\Sigma = \\{a, b\\}$, la gramática:\n$$S \\to a P b$$\n$$P \\to \\epsilon \\mid a P b$$\ngenera el lenguaje:",
     "options": [
       {
         "id": "A",
@@ -843,7 +843,7 @@ export const QUESTIONS_BANK: Question[] = [
     "lessonTitle": "Lección 08 — Gramáticas Libres de Contexto",
     "topic": "Caso Narrativo de Ambigüedad: Dangling-Else",
     "points": 8,
-    "questionText": "El desarrollador Camilo está diseñando la gramática para el compilador de un lenguaje imperativo con la siguiente especificación de sentencias condicionales:**\n$$S \\to \\text{if } C \\text{ then } S \\mid \\text{if } C \\text{ then } S \\text{ else } S \\mid a$$\n**Al compilar la sentencia anidada:**\n$$\\text{if } C_1 \\text{ then if } C_2 \\text{ then } a_1 \\text{ else } a_2$$\n**Camilo observa que el compilador produce un conflicto de ambigüedad (*dangling-else*). ¿A qué se debe este problema?",
+    "questionText": "El desarrollador Camilo está diseñando la gramática para el compilador de un lenguaje imperativo con la siguiente especificación de sentencias condicionales:\n$$S \\to \\text{if } C \\text{ then } S \\mid \\text{if } C \\text{ then } S \\text{ else } S \\mid a$$\nAl compilar la sentencia anidada:\n$$\\text{if } C_1 \\text{ then if } C_2 \\text{ then } a_1 \\text{ else } a_2$$\nCamilo observa que el compilador produce un conflicto de ambigüedad (*dangling-else*). ¿A qué se debe este problema?",
     "options": [
       {
         "id": "A",
@@ -1185,7 +1185,7 @@ export const QUESTIONS_BANK: Question[] = [
     "lessonTitle": "Lección 10 — Análisis Sintáctico y Limpieza",
     "topic": "Pregunta Real de Parcial",
     "points": 8,
-    "questionText": "Dada la siguiente gramática con prefijo común:**\n$$A \\to \\alpha \\beta \\mid \\alpha \\gamma$$\n**Después de aplicar el algoritmo de factorización por la izquierda (*left factoring*) se obtiene exactamente:",
+    "questionText": "Dada la siguiente gramática con prefijo común:\n$$A \\to \\alpha \\beta \\mid \\alpha \\gamma$$\nDespués de aplicar el algoritmo de factorización por la izquierda (*left factoring*) se obtiene exactamente:",
     "options": [
       {
         "id": "A",
@@ -1417,13 +1417,13 @@ export const QUESTIONS_BANK: Question[] = [
     "options": [
       {
         "id": "A",
-        "text": "Verdadera, porque $\\epsilon$ acompaña al centinela '$' en el fondo de la pila.",
-        "explanation": "Opción incorrecta según la definición formal.",
+        "text": "Verdadera, porque $\\epsilon$ acompaña al centinela `$` en el fondo de la pila.",
+        "explanation": "Incorrecto: el símbolo $\\epsilon$ jamás se añade a ningún conjunto SIGUIENTE. En el fondo de la pila solo se sitúa el centinela `$`, mientras que $\\epsilon$ no es un terminal almacenable.",
         "isCorrect": false
       },
       {
         "id": "B",
-        "text": "Falsa, porque $\\epsilon$ NUNCA se añade a ningún conjunto SIGUIENTE; este conjunto solo puede contener terminales reales de $V_T$ y el marcador de fin de entrada '$'.",
+        "text": "Falsa, porque $\\epsilon$ NUNCA se añade a ningún conjunto SIGUIENTE; este conjunto solo puede contener terminales reales de $V_T$ y el marcador de fin de entrada `$`.",
         "explanation": "En las notas de cátedra (`PredictivoLL-PrimeroSiguiente.md`) y en los libros de Aho y Louden, se enfatiza textualmente: *\"Nótese que $\\epsilon$ nunca se añade a SIGUIENTE\"*. Cuando un no terminal $A$ está al final de una regla $B \\to \\alpha A$, lo que se transfiere a $\\text{SIGUIENTE}(A)$ son los elementos de $\\text{SIGUIENTE}(B)$, no $\\epsilon$.",
         "isCorrect": true
       },
@@ -1467,8 +1467,8 @@ export const QUESTIONS_BANK: Question[] = [
       },
       {
         "id": "C",
-        "text": "En las celdas de todos los símbolos terminales $b$ pertenecientes a $\\text{SIGUIENTE}(A)$ (incluyendo el marcador '$' si forma parte de él).",
-        "explanation": "Opción correcta según la cátedra.",
+        "text": "En las celdas de todos los símbolos terminales $b$ pertenecientes a $\\text{SIGUIENTE}(A)$ (incluyendo el marcador `$` si forma parte de él).",
+        "explanation": "Correcto: si $\\epsilon \\in \\text{PRIMERO}(\\alpha)$, la producción $A \\to \\alpha$ debe añadirse a $M[A, b]$ para todo terminal $b \\in \\text{SIGUIENTE}(A)$. Si el símbolo `$` está en $\\text{SIGUIENTE}(A)$, también se añade a $M[A, \\$]$.",
         "isCorrect": true
       },
       {
@@ -1603,37 +1603,37 @@ export const QUESTIONS_BANK: Question[] = [
     "lessonTitle": "Lección 05 — Gramáticas Regulares",
     "topic": "Gramáticas Lineales y Lenguajes Regulares",
     "points": 5,
-    "questionText": "Seleccione una o más de una:**  \n**Los lenguajes generados por las gramáticas regulares:",
+    "questionText": "Respecto a las equivalencias y propiedades de la jerarquía de Chomsky, ¿cuál de las siguientes afirmaciones sobre los lenguajes generados por gramáticas regulares es CORRECTA?",
     "options": [
       {
         "id": "A",
-        "text": "Se pueden representar mediante expresiones regulares.",
-        "explanation": "Los lenguajes regulares son generados por GR, representados por ER y reconocidos por AF (tanto deterministas como no deterministas). La opción B es falsa porque la relación de inclusión es inversa: las gramáticas regulares son un subconjunto estricto de las libres de contexto ($\\mathcal{L}_3 \\subsetneq \\mathcal{L}_2$).",
+        "text": "Se pueden representar equivalentemente mediante expresiones regulares y son reconocidos por autómatas finitos (AFD y AFND).",
+        "explanation": "Correcto: por el Teorema de Kleene y los teoremas de equivalencia de Chomsky, la clase de lenguajes regulares (Tipo 3) coincide exactamente entre los generados por Gramáticas Regulares, representados por Expresiones Regulares y reconocidos por Autómatas Finitos.",
         "isCorrect": true
       },
       {
         "id": "B",
-        "text": "Incluyen a todos los lenguajes generados por las gramáticas libres de contexto.",
-        "explanation": "Distractor teórico.",
+        "text": "Incluyen estrictamente a todos los lenguajes generados por las gramáticas libres de contexto.",
+        "explanation": "Incorrecto: la relación de inclusión es inversa. Las gramáticas regulares son un subconjunto estricto de las libres de contexto ($\\mathcal{L}_3 \\subsetneq \\mathcal{L}_2$).",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "Son exactamente aquellos reconocidos por los autómatas finitos no deterministas.",
-        "explanation": "Los lenguajes regulares son generados por GR, representados por ER y reconocidos por AF (tanto deterministas como no deterministas). La opción B es falsa porque la relación de inclusión es inversa: las gramáticas regulares son un subconjunto estricto de las libres de contexto ($\\mathcal{L}_3 \\subsetneq \\mathcal{L}_2$).",
-        "isCorrect": true
+        "text": "Solo pueden ser reconocidos por autómatas finitos no deterministas (AFND), ya que los deterministas (AFD) carecen de poder computacional.",
+        "explanation": "Incorrecto: los AFND y los AFD tienen exactamente el mismo poder computacional para reconocer lenguajes regulares (mediante la construcción de subconjuntos, todo AFND es convertible a un AFD equivalente).",
+        "isCorrect": false
       },
       {
         "id": "D",
-        "text": "Son exactamente aquellos reconocidos por los autómatas finitos deterministas.",
-        "explanation": "Los lenguajes regulares son generados por GR, representados por ER y reconocidos por AF (tanto deterministas como no deterministas). La opción B es falsa porque la relación de inclusión es inversa: las gramáticas regulares son un subconjunto estricto de las libres de contexto ($\\mathcal{L}_3 \\subsetneq \\mathcal{L}_2$).",
-        "isCorrect": true
+        "text": "Requieren de una pila auxiliar con operaciones push y pop para reconocer todas sus cadenas válidas.",
+        "explanation": "Incorrecto: los autómatas con pila son necesarios para lenguajes independientes del contexto (Tipo 2). Los regulares se reconocen únicamente con estados finitos sin pila.",
+        "isCorrect": false
       }
     ],
-    "theorySummary": "Los lenguajes regulares son generados por GR, representados por ER y reconocidos por AF (tanto deterministas como no deterministas). La opción B es falsa porque la relación de inclusión es inversa: las gramáticas regulares son un subconjunto estricto de las libres de contexto ($\\mathcal{L}_3 \\subsetneq \\mathcal{L}_2$).",
+    "theorySummary": "Los lenguajes regulares (Tipo 3) forman la clase base de la jerarquía: son generados por gramáticas regulares, representados por expresiones regulares y reconocidos tanto por AFD como por AFND con idéntico poder computacional.",
     "sourceCatedra": "Diapositiva 6: Gramáticas Regulares (Cardoso/Tolaba) (Simulacro P2)",
     "sourceBook": "Aho et al. (Dragon Book 2da Ed) Cap. 3.3; Louden Cap. 2",
-    "trapAnalysis": "Pregunta de integración de simulacro general."
+    "trapAnalysis": "Confundir la dirección de inclusión de la jerarquía de Chomsky (L3 está dentro de L2) o creer que los AFND reconocen más lenguajes que los AFD."
   },
   {
     "id": "L05-SIM04",
@@ -1945,37 +1945,37 @@ export const QUESTIONS_BANK: Question[] = [
     "lessonTitle": "Lección 07 — PLY Lex y Autómatas con Pila",
     "topic": "Especificaciones Lex y Autómatas con Pila (AP)",
     "points": 5,
-    "questionText": "Dado un Autómata con Pila que reconoce el lenguaje $L = \\{ w c w^R \\mid w \\in \\{a, b\\}^* \\}$:**  \n**Indique cuál o cuáles cadenas son aceptadas:",
+    "questionText": "Dado un Autómata con Pila diseñado para reconocer el lenguaje de palíndromos con centro explícito $L = \\{ w c w^R \\mid w \\in \\{a, b\\}^* \\}$, ¿cuál de las siguientes cadenas pertenece al lenguaje aceptado por el autómata?",
     "options": [
       {
         "id": "A",
-        "text": "`bacba`",
-        "explanation": "Para $w = \\epsilon$, la cadena es `c`. Para $w = \\text{'bb'}$, $w^R = \\text{'bb'}$, la cadena es `bbcbb`.",
+        "text": "`c`",
+        "explanation": "Correcto: para la palabra vacía $w = \\epsilon$, su reflejo es $w^R = \\epsilon$. Por lo tanto, $w c w^R = \\epsilon c \\epsilon = \\text{'c'}$, siendo la cadena de longitud mínima aceptada por el autómata.",
         "isCorrect": true
       },
       {
         "id": "B",
-        "text": "`abc`",
-        "explanation": "Distractor teórico.",
+        "text": "`bacba`",
+        "explanation": "Incorrecto: para $w = \\text{'ba'}$, su reflejo es $w^R = \\text{'ab'}$, formando `bacab`, no `bacba`.",
         "isCorrect": false
       },
       {
         "id": "C",
-        "text": "$\\epsilon$",
-        "explanation": "Distractor teórico.",
+        "text": "`abc`",
+        "explanation": "Incorrecto: la cadena no posee la componente refleja $w^R$ posterior al centinela 'c'.",
         "isCorrect": false
       },
       {
         "id": "D",
-        "text": "`c`",
-        "explanation": "Para $w = \\epsilon$, la cadena es `c`. Para $w = \\text{'bb'}$, $w^R = \\text{'bb'}$, la cadena es `bbcbb`.",
-        "isCorrect": true
+        "text": "$\\epsilon$",
+        "explanation": "Incorrecto: la cadena vacía no pertenece al lenguaje pues se exige la presencia obligatoria del marcador central 'c'.",
+        "isCorrect": false
       }
     ],
-    "theorySummary": "Para $w = \\epsilon$, la cadena es `c`. Para $w = \\text{'bb'}$, $w^R = \\text{'bb'}$, la cadena es `bbcbb`.",
+    "theorySummary": "La cadena más corta aceptada por $L = \\{ w c w^R \\mid w \\in \\{a, b\\}^* \\}$ corresponde a $w = \\epsilon$, resultando en la cadena unitaria `c`. Cualquier otra cadena debe poseer simetría estricta alrededor de 'c'.",
     "sourceCatedra": "Diapositiva 7: Autómatas a Pila / PLY Lex (Cardoso/Tolaba) (Simulacro P14)",
     "sourceBook": "Peter Linz Cap. 7; Dragon Book Cap. 3.5",
-    "trapAnalysis": "Pregunta de integración de simulacro general."
+    "trapAnalysis": "Creer erróneamente que la cadena más corta es vacía (épsilon) o pasar por alto que para w = épsilon la cadena resultante es c."
   },
   {
     "id": "L07-SIM15",
@@ -2449,7 +2449,7 @@ export const QUESTIONS_BANK: Question[] = [
       },
       {
         "id": "B",
-        "text": "En la fila de $A$, para cada columna de los terminales pertenecientes a $\\text{SIGUIENTE}(A)$ (incluyendo el centinela '$').",
+        "text": "En la fila de $A$, para cada columna de los terminales pertenecientes a $\\text{SIGUIENTE}(A)$ (incluyendo el centinela `$` ).",
         "explanation": "Como $\\alpha$ puede anularse, el parser debe saber qué hacer cuando ve los símbolos que pueden seguir legítimamente a $A$ en la entrada ($\\text{SIGUIENTE}(A)$).",
         "isCorrect": true
       },
@@ -2791,7 +2791,7 @@ export const QUESTIONS_BANK: Question[] = [
       },
       {
         "id": "B",
-        "text": "La pila queda vacía únicamente con $\\$.",
+        "text": "La pila queda vacía únicamente con el centinela `$`. ",
         "explanation": "Error: no se puede haber consumido $A$, ya que el símbolo 'c' todavía no fue derivado ni emparejado.",
         "isCorrect": false
       },

@@ -11,7 +11,13 @@ export const MathText: React.FC<MathTextProps> = ({ text, className = '' }) => {
     if (!text) return null;
 
     // Preserve escaped dollar symbols (\$ or literal $) so they don't corrupt inline math parsing
-    const safeText = text.replace(/\\\$/g, '___LITERAL_DOLLAR___');
+    let safeText = text.replace(/\\\$/g, '___LITERAL_DOLLAR___');
+
+    // Pre-sanitize Moodle / markdown artifacts (stray asterisks around colons and newlines)
+    safeText = safeText
+      .replace(/:\*\*(\s*)/g, ':$1')
+      .replace(/\*\*(\s*\n\s*)\*\*/g, '$1')
+      .replace(/\*\*(\s*)\*\*/g, '$1');
 
     // Split text by display math ($$...$$) and inline math ($...$)
     const parts = safeText.split(/(\$\$[\s\S]*?\$\$|\$[^\$\n]+?\$)/g);
@@ -78,8 +84,8 @@ export const MathText: React.FC<MathTextProps> = ({ text, className = '' }) => {
 };
 
 const RenderFormattedText: React.FC<{ content: string }> = ({ content }) => {
-  // Split on bold (**...**), italic (*...*), inline code (`...`), newline (\n), or literal dollar token
-  const tokens = content.split(/(\*\*[\s\S]*?\*\*|\*[^\*\n]+?\*|`[^`\n]+?`|\n|___LITERAL_DOLLAR___)/g);
+  // Split on bold (**...** on single line), italic (*...*), inline code (`...`), newline (\n), or literal dollar token
+  const tokens = content.split(/(\*\*[^\*\n]+?\*\*|\*[^\*\n]+?\*|`[^`\n]+?`|\n|___LITERAL_DOLLAR___)/g);
 
   return (
     <>
